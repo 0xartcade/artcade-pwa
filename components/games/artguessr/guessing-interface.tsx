@@ -8,6 +8,8 @@ import { Tag, Criteria, GameState } from '../../../types/game-types'
 import React from 'react'
 import { ScoreDisplay } from './score-display'
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 const HOVER_GRADIENT = `
   linear-gradient(
     to bottom right,
