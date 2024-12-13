@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { GameState, GameScore } from '@/types/game-types'
+import React from 'react'
 
 interface ActionWrapperProps {
   children: React.ReactNode
@@ -22,7 +23,7 @@ export function ActionWrapper({
   imageUrl,
   gameState,
   score
-}: ActionWrapperProps): JSX.Element {
+}: ActionWrapperProps): React.ReactElement {
   // Add submit flash and score grid animations
   const getSubmitOverlay = () => {
     if (gameState !== 'submitted') return null;
