@@ -85,15 +85,16 @@ export function ActionWrapper({
   };
 
   return (
-    <div className="relative flex flex-col h-full px-1.5 pt-7 action-wrapper">
-      <div className="absolute inset-0 md:inset-0 md:top-0 -top-[env(safe-area-inset-top)] overflow-hidden">
-        {/* Blurred background image - add opacity transition */}
-        <div className={`absolute inset-0 scale-110 transition-opacity duration-500 ${gameState === 'submitted' ? 'opacity-25' : 'opacity-50'}`}>
+    <div className="fixed inset-0 -top-[env(safe-area-inset-top)] -bottom-[env(safe-area-inset-bottom)] flex flex-col">
+      {/* Background container */}
+      <div className="absolute inset-0 -z-10">
+        {/* Blurred background image */}
+        <div className={`absolute inset-0 transition-opacity duration-500 ${gameState === 'submitted' ? 'opacity-25' : 'opacity-50'}`}>
           <Image
             src={imageUrl || ''}
             alt="Background"
             fill
-            className="object-cover blur-lg"
+            className="object-cover blur-lg scale-110"
             quality={1}
             priority={false}
             unoptimized={imageUrl?.includes('googleusercontent.com')}
@@ -102,15 +103,15 @@ export function ActionWrapper({
           />
         </div>
 
-        {/* Color overlay - reduced brightness */}
+        {/* Color overlay */}
         <motion.div 
           className="absolute inset-0 pointer-events-none mix-blend-hard-light"
           animate={{
             backgroundColor: selectedColor ? selectedColor : 'transparent',
-            opacity: selectedColor ? [0, 0.75, 0.75, 0] : 0, // Reduced from 1 to 0.75
+            opacity: selectedColor ? [0, 0.75, 0.75, 0] : 0,
             boxShadow: selectedColor ? [
               'none',
-              `0 0 40px ${selectedColor}`, // Slightly reduced glow
+              `0 0 40px ${selectedColor}`,
               `0 0 40px ${selectedColor}`,
               'none'
             ] : 'none'
@@ -129,9 +130,9 @@ export function ActionWrapper({
           }}
         />
 
-        {/* Mobile version */}
+        {/* Dark overlay */}
         <motion.div 
-          className="absolute inset-0 pointer-events-none md:hidden bg-black/30"
+          className="absolute inset-0 pointer-events-none bg-black/30"
           animate={{
             opacity: isPulsing ? [1, 0.7] : 1
           }}
@@ -141,32 +142,16 @@ export function ActionWrapper({
             repeatType: "reverse",
             ease: "easeInOut"
           }}
-          style={{
-            borderRadius: '0 0 32px 32px',
-          }}
-        />
-        
-        {/* Desktop version */}
-        <motion.div 
-          className="absolute inset-0 pointer-events-none hidden md:block bg-black/30"
-          animate={{
-            opacity: isPulsing ? [1, 0.7] : 1
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut"
-          }}
-          style={{
-            borderRadius: '24px',
-          }} 
         />
 
-        {/* Add new submit and score overlays */}
+        {/* Submit and score overlays */}
         {getSubmitOverlay()}
       </div>
-      {children}
+
+      {/* Content container */}
+      <div className="relative flex-1 flex flex-col px-1.5 pt-7">
+        {children}
+      </div>
     </div>
   );
 }
