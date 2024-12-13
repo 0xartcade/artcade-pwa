@@ -1,16 +1,17 @@
 "use client"
 
+import React from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 
 interface NFTImageProps {
   src: string
   alt: string
-  onImageClick: () => void
+  onImageClick?: () => void
   layoutId?: string
 }
 
-export function NFTImage({ src, alt, onImageClick, layoutId }: NFTImageProps): JSX.Element {
+export function NFTImage({ src, alt, onImageClick, layoutId }: NFTImageProps): React.ReactElement {
   const isGoogleImage = src.includes('googleusercontent.com')
   
   return (
