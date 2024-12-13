@@ -1,12 +1,18 @@
 import withPWA from '@ducanh2912/next-pwa';
+import { NextConfig } from 'next';
 
-const nextConfig = {
+//////////////////////////////////////////////////////
+/// NEXT.JS CONFIGURATION
+//////////////////////////////////////////////////////
+
+const nextConfig: NextConfig = {
   // PWA Configuration
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
-  // Other configurations
+
+  // Image Configuration
   images: {
     remotePatterns: [
       {
@@ -19,6 +25,8 @@ const nextConfig = {
       },
     ],
   },
+
+  // Security Headers
   async headers() {
     return [
       {
@@ -38,7 +46,7 @@ const nextConfig = {
           },
         ],
       },
-    ]
+    ];
   },
 };
 
