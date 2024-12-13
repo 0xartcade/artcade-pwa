@@ -27,6 +27,7 @@ interface GuessingInterfaceProps {
   onCriteriaClick: (criteria: Criteria) => void
   gameData: { tags: Tag[] } | null
   timeElapsed: number
+  onSubmit: () => void
 }
 
 const truncateText = (text: string, limit: number = 18) => {
@@ -42,7 +43,8 @@ export function GuessingInterface({
   onCriteriaClick,
   gameData,
   timeElapsed,
-}: GuessingInterfaceProps): JSX.Element {
+  onSubmit,
+}: GuessingInterfaceProps): React.ReactElement {
   const [focusedCriteria, setFocusedCriteria] = useState<Criteria | null>(null);
   const randomizedTags = useMemo(() => 
     [...tags].sort(() => Math.random() - 0.5)
