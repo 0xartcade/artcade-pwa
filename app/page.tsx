@@ -1,14 +1,39 @@
+'use client';
+
+import { useEffect } from 'react';
+import { isMobile, isPWA } from '@/utils/deviceDetection';
 import Image from "next/image";
 import { GameArea } from "@/components/game-area";
 import { GAME_TYPES, GAME_MODES } from "@/config/game-registry";
 import { ACTIVE_GAME } from "@/config/active-game";
 
+//////////////////////////////////////////////////////
+/// ROOT PAGE WITH ROUTING LOGIC
+//////////////////////////////////////////////////////
+
 export default function Home() {
+  useEffect(() => {
+    // Only run routing logic on client side
+    if (typeof window === 'undefined') return;
+
+    // If not in PWA mode
+    if (!isPWA()) {
+      if (isMobile()) {
+        window.location.href = '/mobile';
+      } else {
+        window.location.href = '/desktop';
+      }
+      return;
+    }
+
+    // If in PWA mode, the app will render normally
+  }, []);
+
   const activeGameType = GAME_TYPES[ACTIVE_GAME.type];
   const activeGameMode = GAME_MODES[ACTIVE_GAME.mode];
   
   return (
-    <main className="flex min-h-screen bg-black artcade-main">
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {/* Environment Indicator */}
       <div className="fixed bottom-2 left-2 text-xs font-mono text-white/30 z-50">
         {process.env.NODE_ENV === 'development' ? 'Local' : 
