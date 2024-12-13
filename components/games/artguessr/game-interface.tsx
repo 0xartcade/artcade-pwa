@@ -197,6 +197,7 @@ export default function GameInterface() {
                     onCriteriaClick={handleCriteriaClick}
                     gameData={gameData}
                     timeElapsed={elapsedTime}
+                    onSubmit={handleSubmit}
                   />
                 </div>
 
