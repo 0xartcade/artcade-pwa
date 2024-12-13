@@ -18,27 +18,35 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: "cover"
+  viewportFit: "cover",
+  themeColor: "#000000",
 };
 
 export const metadata: Metadata = {
   title: "0xArtcade",
   description: "0xArtcade Game Sandbox",
+  manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/0xArtcade-icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/0xArtcade-icon-512.png", sizes: "512x512", type: "image/png" }
+      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" }
     ],
     apple: [
-      { url: "/0xArtcade-icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/0xArtcade-icon-512.png", sizes: "512x512", type: "image/png" }
+      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" }
     ],
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "0xArtcade"
-  }
+  },
+  applicationName: "0xArtcade",
+  formatDetection: {
+    telephone: false,
+  },
+  themeColor: "#000000",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 };
 
 export default function RootLayout({
@@ -46,17 +54,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const appName = process.env.NODE_ENV === 'development'
-    ? '0xArtcade (Local)'
-    : process.env.VERCEL_ENV === 'production'
-    ? '0xArtcade'
-    : `0xArtcade (${process.env.VERCEL_GIT_COMMIT_REF || 'Preview'})`
-
   return (
     <html lang="en" className={`bg-black ${geistSans.variable} ${geistMono.variable}`}>
-      <head>
-        <title>{appName}</title>
-      </head>
       <body className="font-sans bg-black text-white min-h-[-webkit-fill-available] overflow-y-auto">
         <div className="game-layout pwa-safe-area overflow-y-auto">
           {children}

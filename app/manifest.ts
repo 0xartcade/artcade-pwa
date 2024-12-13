@@ -10,12 +10,14 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: '0xArtcade',
     description: 'Web3 Artcade Game Sandbox',
     start_url: '/',
+    id: '/',
     display: 'standalone',
     background_color: '#000000',
     theme_color: '#000000',
     orientation: 'portrait',
     scope: '/',
     prefer_related_applications: false,
+    categories: ['games', 'entertainment'],
     icons: [
       {
         src: '/icons/icon-72x72.png',

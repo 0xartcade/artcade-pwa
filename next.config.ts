@@ -1,19 +1,17 @@
 import type { NextConfig } from 'next';
-import type { PWAConfig } from '@ducanh2912/next-pwa';
 import withPWA from '@ducanh2912/next-pwa';
 
 //////////////////////////////////////////////////////
-/// CONFIGURATIONS
+/// NEXT.JS CONFIGURATION
 //////////////////////////////////////////////////////
 
-const pwaConfig: PWAConfig = {
+const config = {
+  // PWA Configuration
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
-};
 
-const nextConfig: NextConfig = {
   // Image Configuration
   images: {
     remotePatterns: [
@@ -50,7 +48,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-};
+} satisfies NextConfig;
 
-export default withPWA(nextConfig, pwaConfig);
+export default withPWA(config);
   
