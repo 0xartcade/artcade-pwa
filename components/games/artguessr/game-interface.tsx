@@ -174,7 +174,6 @@ export default function GameInterface() {
                 gameState={gameState}
               />
               <div className="game-layout">
-                {/* IMAGE CONTAINER */}
                 <div className="image-area glass-panel relative w-full h-[40vh] md:h-[45%] overflow-hidden">
                   <div className="absolute inset-1 md:rounded-2xl overflow-hidden">
                     <NFTImage
@@ -186,7 +185,6 @@ export default function GameInterface() {
                   </div>
                 </div>
 
-                {/* GUESS CONTAINER */}
                 <div className="guess-container flex-1 flex flex-col pt-2 overflow-y-auto"> 
                   <GuessingInterface
                     tags={gameData.tags}
@@ -201,7 +199,6 @@ export default function GameInterface() {
                   />
                 </div>
 
-                {/* ACTION CONTAINER */}
                 <div className="action-container p-3">
                   <ActionButton
                     gameState={gameState}

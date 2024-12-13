@@ -3,13 +3,8 @@
 import { useEffect } from 'react';
 import { isMobile } from '@/utils/deviceDetection';
 
-//////////////////////////////////////////////////////
-/// DESKTOP SPLASH PAGE
-//////////////////////////////////////////////////////
-
 export default function DesktopSplash() {
   useEffect(() => {
-    // If user is on mobile, redirect to main app
     if (isMobile()) {
       window.location.href = '/';
     }
@@ -25,7 +20,6 @@ export default function DesktopSplash() {
         <div className="p-4 bg-gray-800 rounded-lg">
           <p className="text-sm opacity-70">
             Scan this QR code with your mobile device
-            {/* TODO: Add QR code component */}
           </p>
         </div>
       </div>

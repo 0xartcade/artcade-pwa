@@ -7,6 +7,7 @@ const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -73,14 +74,12 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-touch-fullscreen" content="yes" />
         <style>{`
-          /* Prevent content flash and ensure full height */
           html, body { 
             background: #000;
             height: 100%;
             overflow: hidden;
           }
           
-          /* iOS-specific full height handling */
           @supports (-webkit-touch-callout: none) {
             html, body {
               height: -webkit-fill-available;
@@ -88,17 +87,13 @@ export default function RootLayout({
             .pwa-safe-area {
               min-height: -webkit-fill-available;
               height: 100%;
-              /* Only apply top safe area padding */
               padding-top: env(safe-area-inset-top);
-              /* Remove bottom padding to allow content to flow behind */
               padding-bottom: 0;
-              /* Optional side padding if needed */
               padding-left: env(safe-area-inset-left);
               padding-right: env(safe-area-inset-right);
             }
           }
 
-          /* Hide browser UI in PWA mode */
           @media all and (display-mode: standalone) {
             body {
               -webkit-touch-callout: none;
