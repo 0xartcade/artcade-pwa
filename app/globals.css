@@ -1,21 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Root CSS Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --artcade-aqua-faded: rgba(82, 219, 255, .9);
+  --artcade-purple-faded: rgba(118, 55, 254, .9);
+  --artcade-tangerine-faded: rgba(255, 61, 93, .9);
+  --artcade-yellow-faded: rgba(253, 236, 207, .9);
+  --artcade-pink-faded: rgba(255, 105, 180, .9);
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sal: env(safe-area-inset-left);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Ensure html, body, and #__next take full height */
+html,
+body,
+#__next {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Body Styling */
+body {
+  background-color: #000000;
+  font-family: 'var(--font-geist-sans)', sans-serif;
+}
+
+/* Game Layout */
+.game-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding-top: var(--sat);
+  padding-right: var(--sar);
+  padding-bottom: var(--sab);
+  padding-left: var(--sal);
+}
+
+/* Responsive Styles for Standalone Mode on Mobile */
+@media screen and (max-width: 768px) and (display-mode: standalone) {
+  html {
+    height: 100vh;
+    height: -webkit-fill-available;
+  }
+  
+  .game-layout {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 110vh;
+    height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+  }
+
+  .game-layout > .image-area {
+    margin: 3.5rem 0rem 0 0rem;
+  }
+
+  .game-layout > .guess-container {
+    margin: 0 0.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+}
+/* Button Styles */
+.retro-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.retro-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 50%,
+    transparent 100%
+  );
+  transform: rotate(-45deg);
+  transition: all 0.3s ease;
+}
+
+.retro-button:hover::before {
+  top: -100%;
+  left: -100%;
+}
+
+.tag-button {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.tag-button:hover {
+  animation: wiggle 0.5s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0% { transform: rotate(0deg) scale(1.05); }
+  25% { transform: rotate(-1deg) scale(1.05); }
+  75% { transform: rotate(1deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1.05); }
+}
+
+.tag-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 50%,
+    transparent 100%
+  );
+  transform: rotate(-45deg);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.tag-button:hover::before {
+  opacity: 1;
+  top: -100%;
+  left: -100%;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+
+/* Component Layer Styles */
+@layer components {
+  .glass-panel {
+    @apply rounded-2xl
+           bg-neutral-900/50 
+           backdrop-blur-2xl
+           ring-1
+           ring-white/10
+           border-white/20
+           shadow-glass;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* Layout Ready Class */
+
+/* Image Container Styles */
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image-container img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* Slide-Up Animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Full Screen Image Styles */
+.artcade-fullscreen-overlay {
+  z-index: 100;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.artcade-fullscreen-image {
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Add these styles */
+.artcade-phone-content {
+  position: relative;
+}
+
+.artcade-game-container {
+  position: relative;
+}
+
+/* Timer positioning */
+@media (min-width: 768px) {
+  .game-timer {
+    position: absolute;
+    top: 25px;
+    left: calc(50% - 26px);
+    width: 52px;
+    margin: 0 auto;
+    z-index: 150;
+  }
+}
+
+@media (max-width: 767px) {
+  .game-timer {
+    position: fixed;
+    top: 50px;
+    left: calc(50% - 26px);
+    width: 52px;
+    margin: 0 auto;
+    z-index: 150;
+  }
+}
+
+/* Adjusted glass panel */
+.glass-panel-light {
+  @apply rounded-2xl
+         bg-neutral-900/30
+         backdrop-blur-[2px]
+         ring-1
+         ring-white/5
+         border-white/5
+         shadow-glass;
 }
