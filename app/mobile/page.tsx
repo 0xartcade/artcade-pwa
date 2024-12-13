@@ -3,10 +3,6 @@
 import { useEffect, useState } from 'react';
 import { isMobile, isPWA } from '@/utils/deviceDetection';
 
-//////////////////////////////////////////////////////
-/// TYPES
-//////////////////////////////////////////////////////
-
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
   readonly userChoice: Promise<{
@@ -16,27 +12,19 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
-//////////////////////////////////////////////////////
-/// MOBILE SPLASH PAGE
-//////////////////////////////////////////////////////
-
 export default function MobileSplash() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
-    // If already in PWA or on desktop, redirect to appropriate page
     if (isPWA()) {
       window.location.href = '/';
     } else if (!isMobile()) {
       window.location.href = '/desktop';
     }
 
-    // Handle PWA installation prompt
     window.addEventListener('beforeinstallprompt', (e) => {
-      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      // Store the event for later use
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setIsInstallable(true);
     });

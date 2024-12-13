@@ -1,13 +1,7 @@
 import type { NextConfig } from 'next';
 import withPWA from '@ducanh2912/next-pwa';
 
-//////////////////////////////////////////////////////
-/// CONFIGURATIONS
-//////////////////////////////////////////////////////
-
-// Next.js Configuration
 const nextConfig: NextConfig = {
-  // Image Configuration
   images: {
     remotePatterns: [
       {
@@ -21,7 +15,6 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // Security Headers
   async headers() {
     return [
       {
@@ -45,7 +38,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-// PWA Configuration
 const withPWAConfig = withPWA({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
@@ -64,7 +56,7 @@ const withPWAConfig = withPWA({
           cacheName: 'image-cache',
           expiration: {
             maxEntries: 50,
-            maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+            maxAgeSeconds: 60 * 60 * 24 * 30,
           },
         },
       },
@@ -75,7 +67,7 @@ const withPWAConfig = withPWA({
           cacheName: 'google-image-cache',
           expiration: {
             maxEntries: 50,
-            maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+            maxAgeSeconds: 60 * 60 * 24 * 30,
           },
         },
       },
@@ -86,7 +78,7 @@ const withPWAConfig = withPWA({
           cacheName: 'static-font-assets',
           expiration: {
             maxEntries: 4,
-            maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+            maxAgeSeconds: 7 * 24 * 60 * 60,
           },
         },
       },
@@ -97,7 +89,7 @@ const withPWAConfig = withPWA({
           cacheName: 'static-image-assets',
           expiration: {
             maxEntries: 64,
-            maxAgeSeconds: 24 * 60 * 60, // 24 hours
+            maxAgeSeconds: 24 * 60 * 60,
           },
         },
       },
@@ -108,7 +100,7 @@ const withPWAConfig = withPWA({
           cacheName: 'static-js-assets',
           expiration: {
             maxEntries: 32,
-            maxAgeSeconds: 24 * 60 * 60, // 24 hours
+            maxAgeSeconds: 24 * 60 * 60,
           },
         },
       },
@@ -119,7 +111,7 @@ const withPWAConfig = withPWA({
           cacheName: 'static-style-assets',
           expiration: {
             maxEntries: 32,
-            maxAgeSeconds: 24 * 60 * 60, // 24 hours
+            maxAgeSeconds: 24 * 60 * 60,
           },
         },
       },
@@ -130,7 +122,7 @@ const withPWAConfig = withPWA({
           cacheName: 'static-data-assets',
           expiration: {
             maxEntries: 32,
-            maxAgeSeconds: 24 * 60 * 60, // 24 hours
+            maxAgeSeconds: 24 * 60 * 60,
           },
         },
       },
@@ -141,7 +133,7 @@ const withPWAConfig = withPWA({
           cacheName: 'others',
           expiration: {
             maxEntries: 32,
-            maxAgeSeconds: 24 * 60 * 60, // 24 hours
+            maxAgeSeconds: 24 * 60 * 60,
           },
           networkTimeoutSeconds: 10,
         },

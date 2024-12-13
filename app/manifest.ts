@@ -1,9 +1,5 @@
 import { MetadataRoute } from 'next';
 
-//////////////////////////////////////////////////////
-/// PWA MANIFEST CONFIGURATION
-//////////////////////////////////////////////////////
-
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: '0xArtcade',

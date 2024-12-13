@@ -1,4 +1,3 @@
-// First define the interfaces
 export interface GameMode {
   name: string
   description: string
@@ -11,7 +10,6 @@ export interface GameType {
   poweredBy: string
 }
 
-// Then define the constants with their types
 export const GAME_TYPES: Record<string, GameType> = {
     'artguessr': {
       name: 'ArtGuessr',
@@ -36,7 +34,6 @@ export const GAME_MODES: Record<string, GameMode> = {
       description: 'This is a template for creating new game modes in the 0xArtcade ecosystem. To use, simply add your game to the components/games directory and updates game-registery.ts with the path and game data'
     }
   } as const
-  
-// Type helpers
+
 export type GameTypeId = keyof typeof GAME_TYPES
 export type GameModeId = keyof typeof GAME_MODES
