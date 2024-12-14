@@ -2,68 +2,55 @@
 
 import { useEffect, useState } from 'react';
 import { isMobile, isPWA } from '@/utils/deviceDetection';
-
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
-    platform: string;
-  }>;
-  prompt(): Promise<void>;
-}
+import { InstallPrompt } from '@/components/install-prompt';
+import { ViewportHandler } from '@/components/viewport-handler';
+import Image from 'next/image';
 
 export default function MobileSplash() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [isPWAMode, setIsPWAMode] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+    setIsPWAMode(isPWA());
+    
     if (isPWA()) {
       window.location.href = '/';
     } else if (!isMobile()) {
       window.location.href = '/desktop';
     }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setIsInstallable(true);
-    });
   }, []);
 
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      setDeferredPrompt(null);
-      setIsInstallable(false);
-    }
-  };
+  if (!mounted) return null;
+  if (isPWAMode) return null;
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-4">
-      <h1 className="text-4xl font-bold mb-6">0xArtcade</h1>
-      <div className="max-w-md text-center">
-        {isInstallable ? (
-          <>
-            <p className="text-xl mb-4">
-              Install 0xArtcade for the best experience
-            </p>
-            <button
-              onClick={handleInstallClick}
-              className="bg-white text-black font-semibold py-2 px-6 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              Install App
-            </button>
-          </>
-        ) : (
-          <p className="text-xl">
-            Add this page to your home screen for the best experience
-          </p>
-        )}
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      <div className="absolute inset-3 opacity-[0.06]">
+        <Image
+          src="/0xartcade_bg_image.png"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+        />
       </div>
+      <ViewportHandler />
+      <div className="h-full flex flex-col items-center justify-start pt-[20vh] relative">
+        <div className="relative w-[420px] h-[90px] mb-8">
+          <Image
+            src="/0xartcade_logo_type.png"
+            alt="0xArtcade"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
+        <p className="text-[17px] text-white/80 text-center max-w-[300px]">
+          0xArtcade is designed to be a full-screen mobile experience. Please follow the instructions below to add the app to your home screen.
+        </p>
+      </div>
+      <InstallPrompt />
     </div>
   );
 } 
