@@ -74,38 +74,55 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-touch-fullscreen" content="yes" />
         <style>{`
-          html, body { 
+          :root {
+            --vh: 1vh;
+          }
+          
+          html { 
             background: #000;
-            height: 100%;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
             overflow: hidden;
+            overscroll-behavior: none;
+          }
+          
+          body {
+            background: #000;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
           }
           
           @supports (-webkit-touch-callout: none) {
-            html, body {
-              height: -webkit-fill-available;
-            }
             .pwa-safe-area {
-              min-height: -webkit-fill-available;
-              height: 100%;
-              padding-top: env(safe-area-inset-top);
-              padding-bottom: 0;
-              padding-left: env(safe-area-inset-left);
-              padding-right: env(safe-area-inset-right);
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              height: 100vh;
+              height: calc(var(--vh, 1vh) * 100);
+              padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+              background: #000;
             }
-          }
-
-          @media all and (display-mode: standalone) {
-            body {
-              -webkit-touch-callout: none;
-              -webkit-user-select: none;
-              user-select: none;
+            
+            .game-layout {
+              height: 100%;
+              margin-bottom: env(safe-area-inset-bottom);
             }
           }
         `}</style>
       </head>
-      <body className="font-sans bg-black text-white overscroll-none">
-        <div className="game-layout pwa-safe-area fixed inset-0">
-          {children}
+      <body className="font-sans text-white overscroll-none">
+        <div className="pwa-safe-area">
+          <div className="game-layout">
+            {children}
+          </div>
         </div>
       </body>
     </html>
