@@ -198,6 +198,7 @@ export default function GameInterface() {
         
         {isFullScreen && currentNFT && (
           <FullScreenImage
+            isOpen={isFullScreen}
             src={currentNFT.image_url}
             alt={currentNFT.questions.title}
             onClose={() => setIsFullScreen(false)}
