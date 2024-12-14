@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { GuessingInterface } from './guessing-interface'
 import { NFTImage } from './nft-image'
 import { ActionButton } from './action-button'
@@ -8,13 +8,15 @@ import { generateGameData } from './game-utils'
 import { fetchGameData } from '@/utils/game-data'
 import { ACTIVE_GAME } from '@/config/active-game'
 import { GameData as TemplateGameData } from '../game-template/game-types'
-import { GameData, NFTMetadata, Tag, Criteria, GameState } from '@/types/game-types'
+import { GameData, Tag } from '@/types/game-types'
 import { GAME_CONFIG } from './game-config'
 import { ActionWrapper } from './action-wrapper'
 import { FullScreenImage } from './full-screen-image'
 import Head from 'next/head'
 import { GameTimer } from './game-timer'
 import { StartScreen } from './start-screen'
+import { GameSummary } from './game-summary'
+import { useGameStore } from './game-mechanics'
 
 function transformToFullGameData(data: TemplateGameData): GameData {
   const titles = [...new Set(data.raw_data.map(nft => nft.questions.title))]
@@ -32,106 +34,80 @@ function transformToFullGameData(data: TemplateGameData): GameData {
 }
 
 export default function GameInterface() {
-  const [gameData, setGameData] = useState<{
-    nft: NFTMetadata;
-    tags: Tag[];
-  } | null>(null);
-  const [gameState, setGameState] = useState<GameState>('start');
-  const [selectedTags, setSelectedTags] = useState<Record<Criteria, Tag | null>>(
-    Object.fromEntries(
-      GAME_CONFIG.questions.map(q => [q.id, null])
-    ) as Record<Criteria, Tag | null>
-  );
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [isFullScreen, setIsFullScreen] = useState(false)
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  // Game Store
+  const {
+    gameState,
+    currentNFT,
+    availableTags,
+    selectedTags,
+    elapsedTime,
+    rounds,
+    totalScore,
+    startNewGame,
+    submitRound,
+    nextRound,
+    updateTime,
+    selectTag,
+    resetTag,
+    setGameData
+  } = useGameStore()
 
+  // Load initial game data
   useEffect(() => {
     fetchGameData(ACTIVE_GAME.mode)
       .then((data: TemplateGameData) => {
         const fullData = transformToFullGameData(data)
-        setGameData(generateGameData(fullData))
+        const gameData = generateGameData(fullData)
+        setGameData(gameData.nft, gameData.tags)
       })
       .catch((error: Error) => {
         console.error('Failed to fetch game data:', error)
       })
-  }, [])
+  }, [setGameData])
 
-  const handleTagClick = (tag: Tag) => {
-    setSelectedTags((prev) => ({
-      ...prev,
-      [tag.criteria]: tag,
-    }))
-    const questionColor = GAME_CONFIG.questions.find(q => q.id === tag.criteria)?.color ?? null;
-    setSelectedColor(questionColor);
-    
-    setTimeout(() => {
-      setSelectedColor(null);
-    }, 1500);
-  }
-
-  const handleSubmit = () => {
-    if (gameState === 'playing') {
-      setGameState('submitted');
-    } else {
-      setSelectedTags(
-        Object.fromEntries(
-          GAME_CONFIG.questions.map(q => [q.id, null])
-        ) as Record<Criteria, Tag | null>
-      );
-      
+  // Load new NFT data when moving to next round
+  useEffect(() => {
+    if (gameState === 'playing' && !currentNFT) {
       fetchGameData(ACTIVE_GAME.mode)
         .then((data: TemplateGameData) => {
           const fullData = transformToFullGameData(data)
-          setGameData(generateGameData(fullData))
-          setGameState('playing');
+          const gameData = generateGameData(fullData)
+          setGameData(gameData.nft, gameData.tags)
         })
         .catch((error: Error) => {
           console.error('Failed to fetch game data:', error)
         })
     }
-  };
+  }, [gameState, currentNFT, setGameData])
+
+  const handleTagClick = (tag: Tag) => {
+    selectTag(tag)
+  }
+
+  const handleSubmit = () => {
+    if (gameState === 'playing') {
+      submitRound()
+    } else if (gameState === 'submitted') {
+      nextRound()
+    }
+  }
 
   const handleTimeout = () => {
     if (gameState === 'playing') {
-      handleSubmit();
-    }
-  };
-
-  const handleReset = (criteria: Criteria) => {
-    if (!gameData) return;
-    
-    const tagToReset = selectedTags[criteria];
-    if (tagToReset) {
-      setSelectedTags((prev) => ({ ...prev, [criteria]: null }));
-      
-      setGameData((prevGameData) => {
-        if (!prevGameData) return null;
-        return {
-          ...prevGameData,
-          tags: prevGameData.tags
-        };
-      });
-    }
-  };
-
-  const handleCriteriaClick = (criteria: Criteria) => {
-    if (gameState === 'playing') {
-      setSelectedTags((prev) => ({ ...prev, [criteria]: null }))
+      submitRound()
     }
   }
 
   const handleStartGame = () => {
-    setGameState('playing');
-  };
+    startNewGame()
+  }
 
-  const handleTimeUpdate = (seconds: number) => {
-    setElapsedTime(seconds);
-  };
+  const [isFullScreen, setIsFullScreen] = useState(false)
+  const imageLayoutId = `nft-image-${currentNFT?.token_id}`
 
-  const imageLayoutId = `nft-image-${gameData?.nft.token_id}`
+  if (!currentNFT && gameState !== 'gameSummary') return null
 
-  return gameData ? (
+  return (
     <>
       <Head>
         <meta 
@@ -145,10 +121,10 @@ export default function GameInterface() {
       </Head>
       <div className="relative w-full h-full">
         <ActionWrapper 
-          selectedColor={selectedColor}
+          selectedColor={null}
           isPulsing={true}
-          blurhash={gameData.nft.blurhash}
-          imageUrl={gameData.nft.image_url}
+          blurhash={currentNFT?.blurhash}
+          imageUrl={currentNFT?.image_url}
           gameState={gameState}
           score={
             gameState === 'submitted' 
@@ -165,11 +141,20 @@ export default function GameInterface() {
         >
           {gameState === 'start' ? (
             <StartScreen onStartGame={handleStartGame} />
-          ) : (
+          ) : gameState === 'gameSummary' ? (
+            <GameSummary 
+              summary={{
+                rounds,
+                totalScore,
+                currentRound: rounds.length
+              }}
+              onNewGame={handleStartGame}
+            />
+          ) : currentNFT ? (
             <>
               <GameTimer 
                 isActive={gameState === 'playing'}
-                onTimeUpdate={handleTimeUpdate}
+                onTimeUpdate={updateTime}
                 onTimeout={handleTimeout}
                 gameState={gameState}
               />
@@ -177,8 +162,8 @@ export default function GameInterface() {
                 <div className="image-area glass-panel relative w-full h-[40vh] md:h-[45%] overflow-hidden">
                   <div className="absolute inset-1 md:rounded-2xl overflow-hidden">
                     <NFTImage
-                      src={gameData.nft.image_url}
-                      alt={gameData.nft.questions.title}
+                      src={currentNFT.image_url}
+                      alt={currentNFT.questions.title}
                       onImageClick={() => setIsFullScreen(true)}
                       layoutId={imageLayoutId}
                     />
@@ -187,13 +172,13 @@ export default function GameInterface() {
 
                 <div className="guess-container flex-1 flex flex-col pt-2 overflow-y-auto"> 
                   <GuessingInterface
-                    tags={gameData.tags}
+                    tags={availableTags}
                     selectedTags={selectedTags}
                     gameState={gameState}
                     onTagClick={handleTagClick}
-                    onReset={handleReset}
-                    onCriteriaClick={handleCriteriaClick}
-                    gameData={gameData}
+                    onReset={resetTag}
+                    onCriteriaClick={resetTag}
+                    gameData={{ tags: availableTags }}
                     timeElapsed={elapsedTime}
                     onSubmit={handleSubmit}
                   />
@@ -208,18 +193,20 @@ export default function GameInterface() {
                 </div>
               </div>
             </>
-          )}
+          ) : null}
         </ActionWrapper>
-
-        <FullScreenImage
-          src={gameData.nft.image_url}
-          alt={gameData.nft.questions.title}
-          isOpen={isFullScreen}
-          onClose={() => setIsFullScreen(false)}
-          layoutId={imageLayoutId}
-        />
+        
+        {isFullScreen && currentNFT && (
+          <FullScreenImage
+            isOpen={isFullScreen}
+            src={currentNFT.image_url}
+            alt={currentNFT.questions.title}
+            onClose={() => setIsFullScreen(false)}
+            layoutId={imageLayoutId}
+          />
+        )}
       </div>
     </>
-  ) : null;
+  )
 }
 

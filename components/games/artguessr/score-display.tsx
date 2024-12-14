@@ -2,26 +2,30 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { calculateScore } from './game-utils'
+import React from 'react'
 
 interface ScoreDisplayProps {
   correctCount: number
   timeLeft: number
   showResults: boolean
   totalQuestions: number
+  isCalculating: boolean
 }
 
-export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestions }: ScoreDisplayProps) {
+export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestions, isCalculating }: ScoreDisplayProps): React.ReactElement {
   const { basePoints, timeMultiplier, totalPoints } = calculateScore(correctCount, timeLeft)
   const timeTaken = 30 - timeLeft
 
   return (
-    <div className="text-center text-white">
-      <AnimatePresence mode="wait">
-        {!showResults ? (
+    <div className="text-center text-white w-full">
+      <AnimatePresence mode="wait" initial={false}>
+        {isCalculating ? (
           <motion.div 
             className="flex flex-col items-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            key="calculating"
           >
             <motion.p 
               className="text-xl font-orbitron tracking-[0.2em] mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400"
@@ -67,17 +71,19 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
               ))}
             </div>
           </motion.div>
-        ) : (
+        ) : showResults ? (
           <motion.div 
             className="flex flex-col items-center space-y-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            key="results"
           >
             {[
-              { label: 'Time Taken', value: `${timeTaken} Seconds`, delay: 0.5 },
-              { label: 'Correct Answers', value: `${correctCount} of ${totalQuestions}`, delay: 1.0 },
-              { label: 'Base Score', value: `${basePoints}pts`, delay: 1.5 },
-              { label: 'Time Multiplier', value: `${timeMultiplier}x`, delay: 2.0 },
+              { label: 'Time Taken', value: `${timeTaken} Seconds`, delay: 0.2 },
+              { label: 'Correct Answers', value: `${correctCount} of ${totalQuestions}`, delay: 0.4 },
+              { label: 'Base Score', value: `${basePoints}pts`, delay: 0.6 },
+              { label: 'Time Multiplier', value: `${timeMultiplier}x`, delay: 0.8 },
             ].map((item) => (
               <motion.div
                 key={item.label}
@@ -96,7 +102,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
               className="mt-4 font-orbitron text-3xl tracking-widest bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 2.5 }}
+              transition={{ delay: 1.0 }}
             >
               <motion.div
                 animate={{
@@ -115,7 +121,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
               </motion.div>
             </motion.div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   )
