@@ -31,11 +31,29 @@ export interface Tag {
   correctAnswer?: string
 }
 
-export type GameState = 'start' | 'playing' | 'submitted' | 'nextRound'
+export type GameState = 'start' | 'playing' | 'submitted' | 'nextRound' | 'gameSummary'
 
 export interface GameScore {
   correct: number
   total: number
   answers: boolean[]
   timeElapsed: number
+}
+
+//////////////////////////////////////////////////////
+/// ROUND MANAGEMENT
+//////////////////////////////////////////////////////
+
+export interface RoundData {
+  imageUrl: string
+  blurhash: string
+  guesses: Record<Criteria, Tag | null>
+  score: GameScore
+  nftMetadata: NFTMetadata
+}
+
+export interface GameSummary {
+  rounds: RoundData[]
+  totalScore: number
+  currentRound: number
 }

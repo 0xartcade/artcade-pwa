@@ -1,14 +1,13 @@
 "use client"
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { GAME_CONFIG, getQuestionColor } from './game-config'
-import { Tag, Criteria, GameState } from '../../../types/game-types'
+import { Tag, Criteria, GameState } from '@/types/game-types'
 import React from 'react'
 import { ScoreDisplay } from './score-display'
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useGameStore } from './game-mechanics'
 
 const HOVER_GRADIENT = `
   linear-gradient(
@@ -32,7 +31,7 @@ interface GuessingInterfaceProps {
   onSubmit: () => void
 }
 
-const truncateText = (text: string, limit: number = 18) => {
+const truncateText = (text: string, limit: number = 18): string => {
   return text.length > limit ? text.slice(0, limit) + '...' : text;
 };
 
@@ -51,18 +50,8 @@ export function GuessingInterface({
   const randomizedTags = useMemo(() => 
     [...tags].sort(() => Math.random() - 0.5)
   , [tags]);
-  const [showResults, setShowResults] = useState(false);
-
-  useEffect(() => {
-    if (gameState === 'submitted') {
-      const timer = setTimeout(() => {
-        setShowResults(true);
-      }, GAME_CONFIG.animations.submit.answerRevealDelay * 1000);
-      return () => clearTimeout(timer);
-    } else {
-      setShowResults(false);
-    }
-  }, [gameState]);
+  
+  const showResults = useGameStore(state => state.showResults);
 
   const handleCriteriaClick = (criteria: Criteria) => {
     if (gameState === 'playing') {
@@ -78,7 +67,7 @@ export function GuessingInterface({
 
   return (
     <div className="artcade-guessing-layout flex flex-col h-full">
-      <div className="options-area glass-panel flex-1 min-h-0 flex flex-wrap content-center gap-1.5 justify-center overflow-y-aut p-3 mb-2">
+      <div className="options-area glass-panel flex-1 min-h-0 flex flex-wrap content-center gap-1.5 justify-center overflow-y-auto p-3 mb-2">
         {gameState === 'submitted' ? (
           <ScoreDisplay 
             key={`score-${timeElapsed}-${Object.values(selectedTags).filter((tag) => tag?.isCorrect).length}`}
@@ -230,4 +219,3 @@ export function GuessingInterface({
     </div>
   )
 }
-
