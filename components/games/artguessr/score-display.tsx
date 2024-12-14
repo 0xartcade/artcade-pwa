@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { calculateScore } from './game-utils'
+import React from 'react'
 
 interface ScoreDisplayProps {
   correctCount: number
@@ -10,7 +11,7 @@ interface ScoreDisplayProps {
   totalQuestions: number
 }
 
-export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestions }: ScoreDisplayProps) {
+export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestions }: ScoreDisplayProps): React.ReactElement {
   const { basePoints, timeMultiplier, totalPoints } = calculateScore(correctCount, timeLeft)
   const timeTaken = 30 - timeLeft
 

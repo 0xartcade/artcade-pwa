@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { GameState } from '@/types/game-types'
+import React from 'react'
 
 interface ActionButtonProps {
   gameState: GameState
@@ -9,7 +10,7 @@ interface ActionButtonProps {
   disabled?: boolean
 }
 
-export function ActionButton({ gameState, onClick, disabled = false }: ActionButtonProps) {
+export function ActionButton({ gameState, onClick, disabled = false }: ActionButtonProps): React.ReactElement {
   const getButtonText = () => {
     switch (gameState) {
       case 'playing':

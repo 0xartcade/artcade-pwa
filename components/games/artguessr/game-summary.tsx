@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { RoundData, GameSummary as GameSummaryType } from '@/types/game-types'
 import { GAME_CONFIG } from './game-config'
+import React from 'react'
 
 interface GameSummaryProps {
   summary: GameSummaryType
@@ -80,7 +81,7 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
 /// GAME SUMMARY SCREEN
 //////////////////////////////////////////////////////
 
-export function GameSummary({ summary, onNewGame }: GameSummaryProps): JSX.Element {
+export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.ReactElement {
   return (
     <div className="game-layout">
       <div className="flex-1 flex flex-col p-4 -mt-8">
