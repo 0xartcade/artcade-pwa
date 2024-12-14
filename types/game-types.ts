@@ -31,7 +31,7 @@ export interface Tag {
   correctAnswer?: string
 }
 
-export type GameState = 'start' | 'playing' | 'submitted' | 'nextRound' | 'gameSummary'
+export type GameState = 'start' | 'playing' | 'calculating' | 'submitted' | 'nextRound' | 'gameSummary'
 
 export interface GameScore {
   correct: number

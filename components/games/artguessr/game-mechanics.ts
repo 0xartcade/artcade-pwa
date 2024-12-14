@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { GameState, GameSummary, RoundData, Tag, Criteria, NFTMetadata, GameScore } from '@/types/game-types'
-import { GAME_CONFIG } from './game-config'
+import { GAME_CONFIG, calculateTickets } from './game-config'
 
 //////////////////////////////////////////////////////
 /// GAME STORE TYPES
@@ -38,7 +38,7 @@ interface GameStore {
 //////////////////////////////////////////////////////
 
 const ROUNDS_PER_GAME = 5
-const SCORE_DISPLAY_DURATION = 4000 // Time to show the score in ms
+const CALCULATION_DURATION = 2000 // Time to show "Calculating" state
 
 const calculateRoundScore = (selectedTags: Record<Criteria, Tag | null>, timeElapsed: number): GameScore => {
   return {
@@ -100,8 +100,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { currentNFT, selectedTags, elapsedTime, rounds } = get()
     if (!currentNFT) return
 
-    // 1. Set initial submitted state
-    set({ gameState: 'submitted', showResults: false })
+    // 1. Set initial calculating state
+    set({ gameState: 'calculating', showResults: false })
 
     const roundData = createRoundData(currentNFT, selectedTags, elapsedTime)
     const newRounds = [...rounds, roundData]
@@ -109,24 +109,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
       total + (round.score.correct * 50), 0
     )
 
-    // 2. Update round data
+    // 2. Update round data and calculate tickets
     set({
       rounds: newRounds,
-      totalScore: newTotalScore
+      totalScore: newTotalScore,
     })
 
-    // 3. Show score after initial animation
+    // 3. Show score after calculation animation
     setTimeout(() => {
-      set({ showResults: true })
-    }, GAME_CONFIG.animations.submit.answerRevealDelay * 1000)
-
-    // 4. Move to next state after showing score
-    setTimeout(() => {
-      set({
-        gameState: newRounds.length >= ROUNDS_PER_GAME ? 'gameSummary' : 'nextRound',
-        showResults: false
+      set({ 
+        gameState: newRounds.length >= ROUNDS_PER_GAME ? 'gameSummary' : 'submitted',
+        showResults: true 
       })
-    }, SCORE_DISPLAY_DURATION)
+    }, CALCULATION_DURATION)
   },
 
   nextRound: () => {

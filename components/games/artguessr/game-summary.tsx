@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { RoundData, GameSummary as GameSummaryType } from '@/types/game-types'
-import { GAME_CONFIG } from './game-config'
+import { GAME_CONFIG, calculateTickets } from './game-config'
 import React from 'react'
 
 interface GameSummaryProps {
@@ -28,11 +28,11 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
     >
-      <div className="flex h-28">
+      <div className="flex h-24">
         {/* Image Container with padding */}
         <div className="p-2 shrink-0">
           {/* Image wrapper */}
-          <div className="relative w-24 h-24 rounded-2xl overflow-hidden">
+          <div className="relative w-20 h-20 rounded-2xl overflow-hidden">
             <Image
               src={round.imageUrl}
               alt={round.nftMetadata.questions.title}
@@ -40,13 +40,13 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
               className="object-cover"
               placeholder={round.blurhash ? "blur" : undefined}
               blurDataURL={round.blurhash}
-              sizes="96px"
+              sizes="80px"
             />
           </div>
         </div>
 
         {/* Guesses Grid */}
-        <div className="flex-1 grid grid-cols-2 gap-x-3 gap-y-2 p-3">
+        <div className="flex-1 grid grid-cols-2 gap-x-3 gap-y-1 p-3">
           {GAME_CONFIG.questions.map((question) => {
             const guess = round.guesses[question.id]
             const isCorrect = guess?.isCorrect
@@ -82,9 +82,12 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
 //////////////////////////////////////////////////////
 
 export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.ReactElement {
+  const earnedTickets = calculateTickets(summary.totalScore)
+  const { maxTicketsPerGame, maxScore } = GAME_CONFIG.gameSettings
+
   return (
     <div className="game-layout">
-      <div className="flex-1 flex flex-col p-4 -mt-8">
+      <div className="flex-1 flex flex-col p-4 -mt-8 overflow-y-auto">
         {/* Title */}
         <motion.h1 
           className="text-2xl font-orbitron text-center mb-5 bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
@@ -95,7 +98,7 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
         </motion.h1>
 
         {/* Rounds */}
-        <div className="space-y-3 mb-5">
+        <div className="space-y-2 mb-5">
           {summary.rounds.map((round, index) => (
             <RoundSummaryCard 
               key={index} 
@@ -105,25 +108,41 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
           ))}
         </div>
 
-        {/* Total Score */}
-        <motion.div 
-          className="text-center mb-5"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <div className="text-white/50 text-sm mb-1">Total Score</div>
-          <div className="text-3xl font-orbitron bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
-            {summary.totalScore}
-          </div>
-        </motion.div>
+        {/* Score Summary */}
+        <div className="grid grid-cols-2 gap-4 mb-5">
+          {/* Total Score */}
+          <motion.div 
+            className="glass-panel p-4 rounded-xl"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="text-white/70 text-sm mb-2">Total Score</div>
+            <div className="text-4xl font-orbitron bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
+              {summary.totalScore} <span className="text-2xl">PTS</span>
+            </div>
+          </motion.div>
+
+          {/* Tickets */}
+          <motion.div 
+            className="glass-panel p-4 rounded-xl"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="text-white/70 text-sm mb-2">Estimated Tickets</div>
+            <div className="text-4xl font-orbitron bg-gradient-to-r from-yellow-400 to-orange-400 text-transparent bg-clip-text">
+              {earnedTickets} <span className="text-2xl">TICKETS</span>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Play Again Button */}
         <motion.div 
-          className="flex justify-center"
+          className="flex justify-center mt-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.9 }}
         >
           <button
             onClick={onNewGame}

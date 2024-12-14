@@ -9,16 +9,17 @@ interface ScoreDisplayProps {
   timeLeft: number
   showResults: boolean
   totalQuestions: number
+  isCalculating: boolean
 }
 
-export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestions }: ScoreDisplayProps): React.ReactElement {
+export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestions, isCalculating }: ScoreDisplayProps): React.ReactElement {
   const { basePoints, timeMultiplier, totalPoints } = calculateScore(correctCount, timeLeft)
   const timeTaken = 30 - timeLeft
 
   return (
     <div className="text-center text-white w-full">
       <AnimatePresence mode="wait" initial={false}>
-        {!showResults ? (
+        {isCalculating ? (
           <motion.div 
             className="flex flex-col items-center"
             initial={{ opacity: 0 }}
@@ -70,7 +71,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
               ))}
             </div>
           </motion.div>
-        ) : (
+        ) : showResults ? (
           <motion.div 
             className="flex flex-col items-center space-y-4"
             initial={{ opacity: 0 }}
@@ -120,7 +121,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
               </motion.div>
             </motion.div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   )

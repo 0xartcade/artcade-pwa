@@ -37,6 +37,13 @@ export const GAME_CONFIG = {
         answerRevealDelay: 2.0,
         answerStaggerDelay: 0.1,
       }
+    },
+
+    gameSettings: {
+      maxTicketsPerGame: 25,
+      maxScore: 1000, // 5 rounds * 4 correct answers * 50 points
+      roundsPerGame: 5,
+      pointsPerCorrectAnswer: 50
     }
   } as const
   
@@ -50,4 +57,9 @@ export const GAME_CONFIG = {
   
   export function getQuestionLabel(id: QuestionId): string {
     return GAME_CONFIG.questions.find(q => q.id === id)?.label || id
+  }
+
+  export function calculateTickets(score: number): number {
+    const { maxTicketsPerGame, maxScore } = GAME_CONFIG.gameSettings
+    return Math.round(maxTicketsPerGame * score / maxScore)
   }

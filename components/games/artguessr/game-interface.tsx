@@ -87,7 +87,7 @@ export default function GameInterface() {
   const handleSubmit = () => {
     if (gameState === 'playing') {
       submitRound()
-    } else if (gameState === 'nextRound') {
+    } else if (gameState === 'submitted') {
       nextRound()
     }
   }

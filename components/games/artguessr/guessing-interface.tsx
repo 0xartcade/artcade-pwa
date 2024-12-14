@@ -68,13 +68,14 @@ export function GuessingInterface({
   return (
     <div className="artcade-guessing-layout flex flex-col h-full">
       <div className="options-area glass-panel flex-1 min-h-0 flex flex-wrap content-center gap-1.5 justify-center overflow-y-auto p-3 mb-2">
-        {gameState === 'submitted' ? (
+        {(gameState === 'submitted' || gameState === 'calculating') ? (
           <ScoreDisplay 
             key={`score-${timeElapsed}-${Object.values(selectedTags).filter((tag) => tag?.isCorrect).length}`}
             correctCount={Object.values(selectedTags).filter((tag) => tag?.isCorrect).length}
             timeLeft={30 - timeElapsed}
             showResults={showResults}
             totalQuestions={GAME_CONFIG.questions.length}
+            isCalculating={gameState === 'calculating'}
           />
         ) : (
           <AnimatePresence>
