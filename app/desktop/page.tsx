@@ -44,7 +44,7 @@ export default function DesktopSplash() {
           {/* QR Code Section */}
           <div className="flex flex-col items-center gap-8">
             <p className="text-[17px] text-white/80 text-center max-w-[420px] leading-relaxed">
-              0xArtcade is designed as a full screen mobile experience. Please scan the QR code below and follow the instructions to add 0xArtcade to your phone's home screen to continue.
+              0xArtcade is designed as a full screen mobile experience. Please scan the QR code below and follow the instructions to add 0xArtcade to your phone&apos;s home screen to continue.
             </p>
             
             <div className="p-4 bg-white rounded-2xl">

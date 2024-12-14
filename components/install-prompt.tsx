@@ -129,7 +129,7 @@ export function InstallPrompt() {
 
                 <div className="flex items-center gap-2.5 text-[14px] text-white/80">
                   <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs">3</span>
-                  <span className="flex-1">Click "Add" to confirm</span>
+                  <span className="flex-1">Click &quot;Add&quot; to confirm</span>
                   <span className="p-1.5 bg-white/10 rounded">
                     <CheckSquare className="w-[18px] h-[18px]" />
                   </span>
