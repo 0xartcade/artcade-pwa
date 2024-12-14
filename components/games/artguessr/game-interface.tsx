@@ -150,7 +150,7 @@ export default function GameInterface() {
               }}
               onNewGame={handleStartGame}
             />
-          ) : (
+          ) : currentNFT ? (
             <>
               <GameTimer 
                 isActive={gameState === 'playing'}
@@ -193,10 +193,10 @@ export default function GameInterface() {
                 </div>
               </div>
             </>
-          )}
+          ) : null}
         </ActionWrapper>
         
-        {isFullScreen && (
+        {isFullScreen && currentNFT && (
           <FullScreenImage
             src={currentNFT.image_url}
             alt={currentNFT.questions.title}
