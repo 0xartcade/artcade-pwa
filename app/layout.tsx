@@ -96,6 +96,14 @@ export default function RootLayout({
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-in forwards;
+          }
+
+          @keyframes fadeIn {
+            to {
+              opacity: 1;
+            }
           }
           
           @supports (-webkit-touch-callout: none) {
