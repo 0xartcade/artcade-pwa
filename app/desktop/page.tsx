@@ -19,7 +19,7 @@ export default function DesktopSplash() {
       {/* Background Image */}
       <div className="absolute inset-3 opacity-[0.06]">
         <Image
-          src="/0xartcade_bg_image.png"
+          src="/images/0xartcade_bg_image.png"
           alt=""
           fill
           className="object-cover"
@@ -33,7 +33,7 @@ export default function DesktopSplash() {
           {/* Logo */}
           <div className="relative w-[500px] h-[110px]">
             <Image
-              src="/images0xartcade_logo_type.png"
+              src="/images/0xartcade_logo_type.png"
               alt="0xArtcade"
               fill
               className="object-contain"

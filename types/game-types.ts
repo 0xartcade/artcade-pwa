@@ -1,3 +1,8 @@
+//////////////////////////////////////////////////////
+/// NFT METADATA
+/// Data structure that will come from backend API
+//////////////////////////////////////////////////////
+
 export interface NFTMetadata {
   collection: string
   contract_address: string
@@ -13,6 +18,11 @@ export interface NFTMetadata {
   predominant_color: string
 }
 
+//////////////////////////////////////////////////////
+/// GAME DATA TYPES
+/// Core data structures that will be served by backend
+//////////////////////////////////////////////////////
+
 export interface GameData {
   raw_data: NFTMetadata[]
   titles: string[]
@@ -21,8 +31,10 @@ export interface GameData {
   seasons: string[]
 }
 
+/* Core game criteria that will be validated by backend */
 export type Criteria = 'TOTAL SUPPLY' | 'SEASON' | 'ARTIST NAME' | 'ART NAME'
 
+/* Tag structure for answer validation */
 export interface Tag {
   id: string
   value: string
@@ -31,8 +43,10 @@ export interface Tag {
   correctAnswer?: string
 }
 
+/* Game state machine states */
 export type GameState = 'start' | 'playing' | 'calculating' | 'submitted' | 'nextRound' | 'gameSummary'
 
+/* Score data that will be validated by backend */
 export interface GameScore {
   correct: number
   total: number
@@ -42,8 +56,10 @@ export interface GameScore {
 
 //////////////////////////////////////////////////////
 /// ROUND MANAGEMENT
+/// Round data structures that will sync with backend
 //////////////////////////////////////////////////////
 
+/* Round data that will be received from backend */
 export interface RoundData {
   imageUrl: string
   blurhash: string
@@ -52,6 +68,7 @@ export interface RoundData {
   nftMetadata: NFTMetadata
 }
 
+/* Game summary that will be synced with backend */
 export interface GameSummary {
   rounds: RoundData[]
   totalScore: number

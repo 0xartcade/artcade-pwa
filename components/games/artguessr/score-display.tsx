@@ -4,15 +4,33 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { calculateScore } from './game-utils'
 import React from 'react'
 
+//////////////////////////////////////////////////////
+/// SCORE DISPLAY COMPONENT
+/// Displays score data received from backend
+//////////////////////////////////////////////////////
+
+/* Props interface for score display */
 interface ScoreDisplayProps {
-  correctCount: number
-  timeLeft: number
-  showResults: boolean
-  totalQuestions: number
-  isCalculating: boolean
+  correctCount: number     // Number of correct answers from backend validation
+  timeLeft: number        // Time remaining from game state
+  showResults: boolean    // UI state for showing results
+  totalQuestions: number  // Total questions from game config
+  isCalculating: boolean  // State during backend score calculation
 }
 
-export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestions, isCalculating }: ScoreDisplayProps): React.ReactElement {
+/* 
+ * Score Display Component
+ * Displays score data that will be validated by:
+ * POST /games/know-your-memes/sessions/{sessionId}/rounds/{roundNumber}/answer
+ */
+export function ScoreDisplay({ 
+  correctCount, 
+  timeLeft, 
+  showResults, 
+  totalQuestions, 
+  isCalculating 
+}: ScoreDisplayProps): React.ReactElement {
+  // Calculate score - will be validated against backend
   const { basePoints, timeMultiplier, totalPoints } = calculateScore(correctCount, timeLeft)
   const timeTaken = 30 - timeLeft
 
@@ -20,6 +38,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
     <div className="text-center text-white w-full bg-transparent">
       <AnimatePresence mode="wait" initial={false}>
         {isCalculating ? (
+          /* Loading state while waiting for backend validation */
           <motion.div 
             className="flex flex-col items-center bg-transparent"
             initial={{ opacity: 0 }}
@@ -72,6 +91,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
             </div>
           </motion.div>
         ) : showResults ? (
+          /* Display validated score data from backend */
           <motion.div 
             className="flex flex-col items-center space-y-4 bg-transparent"
             initial={{ opacity: 0 }}
@@ -98,6 +118,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
               </motion.div>
             ))}
             
+            {/* Display final validated score from backend */}
             <motion.div
               className="mt-4 font-['Orbitron'] text-3xl tracking-widest bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
               initial={{ opacity: 0, scale: 0.8 }}

@@ -260,7 +260,6 @@ export default function GameInterface() {
 
         <ActionWrapper 
           selectedColor={null}
-          isPulsing={true}
           blurhash={currentNFT?.blurhash}
           imageUrl={currentNFT?.image_url}
           gameState={gameState}
