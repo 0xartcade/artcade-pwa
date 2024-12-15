@@ -13,7 +13,7 @@ interface ActionWrapperProps {
   imageUrl?: string
   gameState: GameState
   score?: GameScore
-  currentNFTId?: string
+  currentNFTId?: string | number
   timeProgress?: number
 }
 
