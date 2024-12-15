@@ -43,18 +43,5 @@ export function GameTimer({ isActive, onTimeUpdate, onTimeout, gameState }: Game
     }
   }, [isActive, seconds, updateTime])
 
-  return (
-    <motion.div 
-      className="game-timer"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-    >
-      <div className="w-full flex items-center justify-center p-2 bg-transparent">
-        <div className="text-lg font-['Orbitron'] font-bold text-white bg-transparent">
-          {seconds}
-        </div>
-      </div>
-    </motion.div>
-  )
+  return null
 } 

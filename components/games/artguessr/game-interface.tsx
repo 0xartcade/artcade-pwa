@@ -212,6 +212,9 @@ export default function GameInterface() {
     return `Round ${roundNumber}`
   }
 
+  // Calculate time progress (0 to 1)
+  const timeProgress = gameState === 'playing' ? Math.max(0, 1 - (elapsedTime / 30)) : 1
+
   // Render loading screen immediately if in initial loading state
   if (isInitialLoading) {
     return (
@@ -262,6 +265,7 @@ export default function GameInterface() {
           imageUrl={currentNFT?.image_url}
           gameState={gameState}
           currentNFTId={currentNFT?.token_id}
+          timeProgress={timeProgress}
           score={
             gameState === 'submitted' 
               ? {
