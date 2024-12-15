@@ -31,8 +31,10 @@ interface GuessingInterfaceProps {
   onSubmit: () => void
 }
 
-const truncateText = (text: string, limit: number = 18): string => {
-  return text.length > limit ? text.slice(0, limit) + '...' : text;
+const truncateText = (text: string | number | undefined, limit: number = 18): string => {
+  if (text === undefined) return '';
+  const str = text.toString();
+  return str.length > limit ? str.slice(0, limit) + '...' : str;
 };
 
 export function GuessingInterface({
@@ -183,13 +185,14 @@ export function GuessingInterface({
                     exit={{ opacity: 0, scale: 0.8 }}
                     className="answer-text w-full h-full flex items-center justify-center group"
                     style={{
-                      backgroundColor: gameState === 'submitted' ? 'rgba(239, 68, 68, 0.4)' : 'transparent'
+                      backgroundColor: gameState === 'submitted' ? 'rgba(239, 68, 68, 0.4)' : 'transparent',
+                      opacity: gameState === 'submitted' ? 1 : 0.5  // 50% opacity for empty cells
                     }}
                   >
                     <span
                       className={`
                         answer-text text-sm md:text-xs font-semibold text-center px-1 uppercase
-                        transition-opacity duration-200 font-['Orbitron']
+                        transition-opacity duration-200
                         ${gameState === 'submitted' ? 'text-white group-hover:opacity-0' : ''}
                       `}
                       style={{ color: gameState === 'submitted' ? 'white' : question.color }}
@@ -200,9 +203,9 @@ export function GuessingInterface({
                     {gameState === 'submitted' && (
                       <span className="
                         transition-opacity duration-200 absolute inset-0 
-                        flex items-center justify-center
+                        flex items-center justify-center font-semibold
                         opacity-0 group-hover:opacity-100
-                        text-sm md:text-xs font-semibold text-white
+                        text-sm md:text-xs text-white
                       ">
                         {truncateText(gameData?.tags.find((t: Tag) => 
                           t.criteria === question.id && t.isCorrect
