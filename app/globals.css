@@ -155,15 +155,7 @@ body {
 
 /* Component Layer Styles */
 @layer components {
-  .glass-panel {
-    @apply rounded-2xl
-           bg-neutral-900/50 
-           backdrop-blur-2xl
-           ring-1
-           ring-white/10
-           border-white/20
-           shadow-glass;
-  }
+  /* Remove glass-panel class */
 }
 
 /* Layout Ready Class */
@@ -249,8 +241,6 @@ body {
   @apply rounded-2xl
          bg-neutral-900/30
          backdrop-blur-[2px]
-         ring-1
-         ring-white/5
-         border-white/5
-         shadow-glass;
+         border
+         border-white/5;
 }

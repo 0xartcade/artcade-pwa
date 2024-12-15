@@ -34,7 +34,7 @@ export function NFTImage({ src, alt, onImageClick, layoutId }: NFTImageProps): R
         src={src}
         alt={alt}
         fill
-        className="w-full h-full object-cover scale-110 artcade-nft-image"
+        className="w-full h-full object-cover scale-[1.2]"
         sizes="100vw"
         priority
         quality={90}

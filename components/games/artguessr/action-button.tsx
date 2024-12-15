@@ -14,17 +14,17 @@ export function ActionButton({ gameState, onClick, disabled = false }: ActionBut
   const getButtonText = () => {
     switch (gameState) {
       case 'playing':
-        return 'Submit Guess'
+        return 'SUBMIT GUESS'
       case 'calculating':
-        return 'Calculating...'
+        return 'CALCULATING...'
       case 'submitted':
-        return 'Next Round'
+        return 'NEXT ROUND'
       case 'nextRound':
-        return 'Next Round'
+        return 'NEXT ROUND'
       case 'gameSummary':
-        return 'View Summary'
+        return 'VIEW SUMMARY'
       default:
-        return 'Start'
+        return 'START'
     }
   }
 
@@ -33,13 +33,13 @@ export function ActionButton({ gameState, onClick, disabled = false }: ActionBut
       case 'playing':
         return 'from-artcade-purple to-artcade-pink hover:from-artcade-purple/80 hover:to-artcade-pink/80'
       case 'calculating':
-        return 'from-gray-500 to-gray-600'
+        return 'from-artcade-purple to-artcade-pink hover:from-artcade-purple/80 hover:to-artcade-pink/80'
       case 'submitted':
-        return 'from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
+        return 'from-artcade-purple to-artcade-pink hover:from-artcade-purple/80 hover:to-artcade-pink/80'
       case 'nextRound':
-        return 'from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
+        return 'from-artcade-purple to-artcade-pink hover:from-artcade-purple/80 hover:to-artcade-pink/80'
       case 'gameSummary':
-        return 'from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+        return 'from-artcade-purple to-artcade-pink hover:from-artcade-purple/80 hover:to-artcade-pink/80'
       default:
         return 'from-artcade-purple to-artcade-pink hover:from-artcade-purple/80 hover:to-artcade-pink/80'
     }

@@ -23,12 +23,23 @@ interface RoundSummaryCardProps {
 const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
   return (
     <motion.div 
-      className="glass-panel rounded-xl overflow-hidden"
+      className="rounded-xl overflow-hidden relative bg-black/50"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
     >
-      <div className="flex h-24">
+      {/* Background image */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src={round.imageUrl}
+          alt=""
+          fill
+          className="object-cover blur-sm opacity-100"
+          quality={1}
+        />
+      </div>
+
+      <div className="flex h-24 relative">
         {/* Image Container with padding */}
         <div className="p-2 shrink-0">
           {/* Image wrapper */}
@@ -46,7 +57,7 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
         </div>
 
         {/* Guesses Grid */}
-        <div className="flex-1 grid grid-cols-2 gap-x-3 gap-y-1 p-3">
+        <div className="flex-1 grid grid-cols-2 gap-x-3 gap-y-1 p-2">
           {GAME_CONFIG.questions.map((question) => {
             const guess = round.guesses[question.id]
             const isCorrect = guess?.isCorrect
@@ -54,7 +65,7 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
             return (
               <div 
                 key={question.id}
-                className="text-xs flex items-center"
+                className="text-sm flex items-center"
               >
                 <div className={`
                   flex-1 truncate font-medium
@@ -68,7 +79,7 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
         </div>
 
         {/* Score */}
-        <div className="w-14 h-full flex flex-col items-center justify-center bg-black/20 text-sm font-medium">
+        <div className="w-14 h-full flex flex-col items-center justify-center bg-black/60 text-md font-medium">
           <div>{round.score.correct * 50}</div>
           <div className="text-[10px] text-white/50">pts</div>
         </div>
@@ -84,13 +95,34 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
 export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.ReactElement {
   const earnedTickets = calculateTickets(summary.totalScore)
   const { maxTicketsPerGame, maxScore } = GAME_CONFIG.gameSettings
+  const STATIC_BG = '/images/bg_game_6529.JPEG'
 
   return (
     <div className="game-layout">
-      <div className="flex-1 flex flex-col p-4 -mt-8 overflow-y-auto">
+      {/* Static background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <motion.div 
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.4 }}
+        >
+          <Image
+            src={STATIC_BG}
+            alt="Background"
+            fill
+            className="object-cover blur-2xl scale-[1.2] brightness-90 hue-rotate-15"
+            quality={1}
+            priority
+          />
+        </motion.div>
+        <div className="absolute inset-0 pointer-events-none bg-black/20" />
+        <div className="absolute inset-0 pointer-events-none bg-blue-900/10" />
+      </div>
+
+      <div className="relative flex-1 flex flex-col p-4 px-2 -mt-8 overflow-y-auto z-10">
         {/* Title */}
         <motion.h1 
-          className="text-2xl font-orbitron text-center mb-5 bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
+          className="text-2xl font-orbitron text-center mb-5 mt-10 bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -98,7 +130,7 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
         </motion.h1>
 
         {/* Rounds */}
-        <div className="space-y-2 mb-5">
+        <div className="space-y-2 mb-5 px-1">
           {summary.rounds.map((round, index) => (
             <RoundSummaryCard 
               key={index} 
@@ -112,45 +144,68 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
         <div className="grid grid-cols-2 gap-4 mb-5">
           {/* Total Score */}
           <motion.div 
-            className="glass-panel p-4 rounded-xl"
+            className="rounded-xl relative overflow-hidden"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <div className="text-white/70 text-sm mb-2">Total Score</div>
-            <div className="text-4xl font-orbitron bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
-              {summary.totalScore} <span className="text-2xl">PTS</span>
+            {/* Darker background */}
+            <div className="absolute inset-0 -z-10 bg-black/60" />
+            <div className="p-4">
+              <div className="text-white/70 text-sm mb-2">Total Score</div>
+              <div className="flex flex-col">
+                <div className="text-4xl font-['Orbitron'] bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
+                  {summary.totalScore}
+                </div>
+                <div className="text-2xl font-['Orbitron'] bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">
+                  PTS
+                </div>
+              </div>
             </div>
           </motion.div>
 
           {/* Tickets */}
           <motion.div 
-            className="glass-panel p-4 rounded-xl"
+            className="rounded-xl relative overflow-hidden"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <div className="text-white/70 text-sm mb-2">Estimated Tickets</div>
-            <div className="text-4xl font-orbitron bg-gradient-to-r from-yellow-400 to-orange-400 text-transparent bg-clip-text">
-              {earnedTickets} <span className="text-2xl">TICKETS</span>
+            {/* Darker background */}
+            <div className="absolute inset-0 -z-10 bg-black/60" />
+            <div className="p-4">
+              <div className="text-white/70 text-sm mb-2">Estimated Tickets</div>
+              <div className="flex flex-col">
+                <div className="text-4xl font-['Orbitron'] bg-gradient-to-r from-yellow-400 to-orange-400 text-transparent bg-clip-text">
+                  {earnedTickets}
+                </div>
+                <div className="text-2xl font-['Orbitron'] bg-gradient-to-r from-yellow-400 to-orange-400 text-transparent bg-clip-text">
+                  TICKETS
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
 
         {/* Play Again Button */}
-        <motion.div 
-          className="flex justify-center mt-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-        >
-          <button
+        <div className="action-container px-3 pt-3 pb-1 min-h-[75px] h-[75px] flex items-center justify-center w-full max-w-md mx-auto">
+          <motion.button
+            className={`
+              w-full h-full bg-gradient-to-r from-artcade-purple to-artcade-pink hover:from-artcade-purple/80 hover:to-artcade-pink/80
+              text-white border-2 border-white/20 shadow-lg 
+              font-['Orbitron'] font-bold text-lg md:text-sm 
+              rounded-2xl retro-button
+            `}
             onClick={onNewGame}
-            className="px-8 py-3 bg-gradient-to-r from-artcade-purple to-artcade-pink hover:from-artcade-purple/80 hover:to-artcade-pink/80 text-white border-2 border-white/20 shadow-lg font-['Orbitron'] rounded-xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            Play Again
-          </button>
-        </motion.div>
+            PLAY AGAIN
+          </motion.button>
+        </div>
       </div>
     </div>
   )

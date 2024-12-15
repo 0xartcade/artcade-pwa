@@ -39,7 +39,7 @@ export default function Home() {
           <div className="flex flex-col items-center justify-start pt-[20vh] relative">
             <div className="relative w-[420px] h-[90px] mb-8">
               <Image
-                src="/0xartcade_logo_type.png"
+                src="/images/0xartcade_logo_type.png"
                 alt="0xArtcade"
                 fill
                 className="object-contain"

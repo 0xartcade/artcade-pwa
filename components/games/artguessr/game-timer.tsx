@@ -50,11 +50,9 @@ export function GameTimer({ isActive, onTimeUpdate, onTimeout, gameState }: Game
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
-      <div className="glass-panel-light w-[52px] h-[42px] flex items-center justify-center">
-        <div className="flex items-center justify-center w-full h-full">
-          <span className="font-['Orbitron'] text-xl text-white tabular-nums text-center block w-full">
-            {seconds}
-          </span>
+      <div className="w-full flex items-center justify-center p-2 bg-transparent">
+        <div className="text-lg font-['Orbitron'] font-bold text-white bg-transparent">
+          {seconds}
         </div>
       </div>
     </motion.div>

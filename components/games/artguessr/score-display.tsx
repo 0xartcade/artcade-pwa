@@ -17,18 +17,18 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
   const timeTaken = 30 - timeLeft
 
   return (
-    <div className="text-center text-white w-full">
+    <div className="text-center text-white w-full bg-transparent">
       <AnimatePresence mode="wait" initial={false}>
         {isCalculating ? (
           <motion.div 
-            className="flex flex-col items-center"
+            className="flex flex-col items-center bg-transparent"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             key="calculating"
           >
             <motion.p 
-              className="text-xl font-orbitron tracking-[0.2em] mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400"
+              className="text-xl font-['Orbitron'] tracking-[0.2em] mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400"
               animate={{
                 textShadow: [
                   "0 0 7px #fff",
@@ -47,7 +47,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
             >
               CALCULATING
             </motion.p>
-            <div className="flex gap-2 mt-1">
+            <div className="flex gap-2 mt-1 bg-transparent">
               {[0, 1, 2].map((i) => (
                 <motion.div
                   key={i}
@@ -73,7 +73,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
           </motion.div>
         ) : showResults ? (
           <motion.div 
-            className="flex flex-col items-center space-y-4"
+            className="flex flex-col items-center space-y-4 bg-transparent"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -87,7 +87,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
             ].map((item) => (
               <motion.div
                 key={item.label}
-                className="font-orbitron text-lg tracking-wider"
+                className="font-['Orbitron'] text-lg tracking-wider bg-transparent"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: item.delay }}
@@ -99,7 +99,7 @@ export function ScoreDisplay({ correctCount, timeLeft, showResults, totalQuestio
             ))}
             
             <motion.div
-              className="mt-4 font-orbitron text-3xl tracking-widest bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
+              className="mt-4 font-['Orbitron'] text-3xl tracking-widest bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.0 }}
