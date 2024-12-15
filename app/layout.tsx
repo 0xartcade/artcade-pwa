@@ -32,12 +32,12 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/0xArtcade-icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/0xArtcade-icon-512.png", sizes: "512x512", type: "image/png" }
+      { url: "/icons/0xArtcade-icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/0xArtcade-icon-512.png", sizes: "512x512", type: "image/png" }
     ],
     apple: [
-      { url: "/0xArtcade-icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/0xArtcade-icon-512.png", sizes: "512x512", type: "image/png" }
+      { url: "/icons/0xArtcade-icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/0xArtcade-icon-512.png", sizes: "512x512", type: "image/png" }
     ],
   },
   appleWebApp: {

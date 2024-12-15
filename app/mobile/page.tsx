@@ -28,7 +28,7 @@ export default function MobileSplash() {
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <div className="absolute inset-3 opacity-[0.06]">
         <Image
-          src="/0xartcade_bg_image.png"
+          src="/images/0xartcade_bg_image.png"
           alt=""
           fill
           className="object-cover"
