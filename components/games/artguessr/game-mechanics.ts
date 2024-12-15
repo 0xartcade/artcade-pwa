@@ -31,6 +31,7 @@ interface GameStore {
   resetTag: (criteria: Criteria) => void
   setGameData: (nft: NFTMetadata, tags: Tag[]) => void
   setShowResults: (show: boolean) => void
+  setGameState: (state: GameState) => void
 }
 
 //////////////////////////////////////////////////////
@@ -163,5 +164,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setShowResults: (show: boolean) => set({
     showResults: show
+  }),
+
+  setGameState: (state: GameState) => set({
+    gameState: state
   })
 })) 

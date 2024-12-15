@@ -33,7 +33,7 @@ export default function DesktopSplash() {
           {/* Logo */}
           <div className="relative w-[500px] h-[110px]">
             <Image
-              src="/0xartcade_logo_type.png"
+              src="/images0xartcade_logo_type.png"
               alt="0xArtcade"
               fill
               className="object-contain"

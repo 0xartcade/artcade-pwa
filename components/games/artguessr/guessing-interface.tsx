@@ -66,8 +66,8 @@ export function GuessingInterface({
   }, [randomizedTags, focusedCriteria]);
 
   return (
-    <div className="artcade-guessing-layout flex flex-col h-full">
-      <div className="options-area glass-panel flex-1 min-h-0 flex flex-wrap content-center gap-1.5 justify-center overflow-y-auto p-3 mb-2">
+    <div className="artcade-guessing-layout flex flex-col h-full bg-transparent">
+      <div className="options-area flex-1 min-h-0 flex flex-wrap content-center gap-1.5 justify-center p-3 bg-transparent">
         {(gameState === 'submitted' || gameState === 'calculating') ? (
           <ScoreDisplay 
             key={`score-${timeElapsed}-${Object.values(selectedTags).filter((tag) => tag?.isCorrect).length}`}
@@ -83,14 +83,13 @@ export function GuessingInterface({
               (!selectedTags[tag.criteria]) && (
                 <motion.button
                   key={tag.id}
-                  className="px-3 py-1 rounded-full font-semibold relative overflow-hidden tag-button hover:scale-105 bg-tint-black/35 backdrop-blur-2xl border border-white/10 text-sm md:text-xs"
+                  className="px-3 py-1 rounded-full font-semibold relative overflow-hidden hover:scale-105 bg-black/50 text-sm md:text-xs text-white"
                   style={{
-                    color: getQuestionColor(tag.criteria),
                     borderColor: getQuestionColor(tag.criteria),
                     borderWidth: 1,
                   }}
                   whileHover={{
-                    background: HOVER_GRADIENT,
+                    scale: 1.05
                   }}
                   onClick={() => {
                     onTagClick(tag);
@@ -110,13 +109,13 @@ export function GuessingInterface({
           </AnimatePresence>
         )}
       </div>
-      <div className="answers-area glass-panel p-2">
-        <div className="grid grid-cols-2 gap-1">
+      <div className="answers-area px-3 bg-transparent">
+        <div className="grid grid-cols-2 gap-1 bg-transparent">
           {GAME_CONFIG.questions.map((question) => (
             <div
               key={question.id}
               id="answer-cells"
-              className="h-8 rounded-xl border flex items-center justify-center overflow-hidden bg-tint-black/80 backdrop-blur-md"
+              className="h-8 rounded-xl flex items-center justify-center overflow-hidden bg-black/50"
               style={{
                 borderColor: gameState === 'submitted' && showResults ? 'transparent' : question.color,
                 borderWidth: 1,
@@ -190,7 +189,7 @@ export function GuessingInterface({
                     <span
                       className={`
                         answer-text text-sm md:text-xs font-semibold text-center px-1 uppercase
-                        transition-opacity duration-200
+                        transition-opacity duration-200 font-['Orbitron']
                         ${gameState === 'submitted' ? 'text-white group-hover:opacity-0' : ''}
                       `}
                       style={{ color: gameState === 'submitted' ? 'white' : question.color }}
