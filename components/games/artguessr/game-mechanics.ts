@@ -4,25 +4,26 @@ import { GAME_CONFIG, calculateTickets } from './game-config'
 
 //////////////////////////////////////////////////////
 /// GAME STORE TYPES
+/// Core types for game state management
 //////////////////////////////////////////////////////
 
+/* Game session state that will sync with backend */
 interface GameStore {
-  // Game State
   gameState: GameState
   currentRound: number
   elapsedTime: number
   selectedTags: Record<Criteria, Tag | null>
   showResults: boolean
   
-  // Round Data
+  // Round data from backend
   rounds: RoundData[]
   totalScore: number
   
-  // Current NFT Data
+  // Current NFT Data from backend
   currentNFT: NFTMetadata | null
   availableTags: Tag[]
 
-  // Actions
+  // Actions that will integrate with backend
   startNewGame: () => void
   submitRound: () => void
   nextRound: () => void
@@ -36,6 +37,7 @@ interface GameStore {
 
 //////////////////////////////////////////////////////
 /// GAME MECHANICS
+/// Core game logic that will interact with backend
 //////////////////////////////////////////////////////
 
 const ROUNDS_PER_GAME = 5
@@ -68,8 +70,15 @@ const createRoundData = (
 
 //////////////////////////////////////////////////////
 /// GAME STORE
+/// State management that will sync with backend
 //////////////////////////////////////////////////////
 
+/* 
+ * This store will need to:
+ * 1. Create game sessions via POST /games/know-your-memes/sessions
+ * 2. Submit answers via POST /games/know-your-memes/sessions/{sessionId}/rounds/{roundNumber}/answer
+ * 3. Fetch new rounds via GET /games/know-your-memes/sessions/{sessionId}/rounds/{roundNumber}
+ */
 export const useGameStore = create<GameStore>((set, get) => ({
   // Initial State
   gameState: 'start',

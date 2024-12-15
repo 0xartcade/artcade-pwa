@@ -17,25 +17,25 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['games', 'entertainment'],
     icons: [
       {
-        src: '/0xArtcade-icon-192.png',
+        src: '/icons/0xArtcade-icon-192.png',
         sizes: '192x192',
         type: 'image/png',
         purpose: 'maskable'
       },
       {
-        src: '/0xArtcade-icon-192.png',
+        src: '/icons/0xArtcade-icon-192.png',
         sizes: '192x192',
         type: 'image/png',
         purpose: 'any'
       },
       {
-        src: '/0xArtcade-icon-512.png',
+        src: '/icons/0xArtcade-icon-512.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'maskable'
       },
       {
-        src: '/0xArtcade-icon-512.png',
+        src: '/icons/0xArtcade-icon-512.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any'

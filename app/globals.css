@@ -4,19 +4,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Root CSS Variables */
+/* ----------------------------------------
+   ROOT VARIABLES
+---------------------------------------- */
+
 :root {
   --artcade-aqua-faded: rgba(82, 219, 255, .9);
   --artcade-purple-faded: rgba(118, 55, 254, .9);
   --artcade-tangerine-faded: rgba(255, 61, 93, .9);
   --artcade-yellow-faded: rgba(253, 236, 207, .9);
   --artcade-pink-faded: rgba(255, 105, 180, .9);
+  /* Safe area insets for mobile devices */
   --sat: env(safe-area-inset-top);
   --sar: env(safe-area-inset-right);
   --sal: env(safe-area-inset-left);
+  --sab: env(safe-area-inset-bottom);
 }
 
-/* Ensure html, body, and #__next take full height */
+/* ----------------------------------------
+   BASE STYLES
+---------------------------------------- */
+
+/* Base layout styles */
 html,
 body,
 #__next {
@@ -26,13 +35,15 @@ body,
   padding: 0;
 }
 
-/* Body Styling */
 body {
   background-color: #000000;
   font-family: 'var(--font-geist-sans)', sans-serif;
 }
 
-/* Game Layout */
+/* ----------------------------------------
+   GAME LAYOUT
+---------------------------------------- */
+
 .game-layout {
   display: flex;
   flex-direction: column;
@@ -44,7 +55,7 @@ body {
   padding-left: var(--sal);
 }
 
-/* Responsive Styles for Standalone Mode on Mobile */
+/* Mobile PWA specific styles */
 @media screen and (max-width: 768px) and (display-mode: standalone) {
   html {
     height: 100vh;
@@ -57,7 +68,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 110vh;
+    height: 100vh;
     height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
@@ -77,8 +88,17 @@ body {
     flex-direction: column;
   }
 
+  .game-layout > .action-container {
+    margin-bottom: env(safe-area-inset-bottom);
+    padding-bottom: 0.5rem;
+  }
 }
-/* Button Styles */
+
+/* ----------------------------------------
+   BUTTON STYLES
+---------------------------------------- */
+
+/* Retro button effect */
 .retro-button {
   position: relative;
   overflow: hidden;
@@ -108,6 +128,7 @@ body {
   left: -100%;
 }
 
+/* Tag button effect */
 .tag-button {
   position: relative;
   transition: all 0.2s ease;
@@ -149,18 +170,10 @@ body {
   left: -100%;
 }
 
-.cursor-grab {
-  cursor: grab;
-}
+/* ----------------------------------------
+   IMAGE STYLES
+---------------------------------------- */
 
-/* Component Layer Styles */
-@layer components {
-  /* Remove glass-panel class */
-}
-
-/* Layout Ready Class */
-
-/* Image Container Styles */
 .image-container {
   position: relative;
   width: 100%;
@@ -174,21 +187,7 @@ body {
   height: 100%;
 }
 
-/* Slide-Up Animation */
-@keyframes slide-up {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.3s ease-out;
-}
-
-/* Full Screen Image Styles */
+/* Full Screen Image */
 .artcade-fullscreen-overlay {
   z-index: 100;
   position: fixed;
@@ -204,16 +203,11 @@ body {
   object-fit: contain;
 }
 
-/* Add these styles */
-.artcade-phone-content {
-  position: relative;
-}
+/* ----------------------------------------
+   TIMER STYLES
+---------------------------------------- */
 
-.artcade-game-container {
-  position: relative;
-}
-
-/* Timer positioning */
+/* Desktop timer */
 @media (min-width: 768px) {
   .game-timer {
     position: absolute;
@@ -225,6 +219,7 @@ body {
   }
 }
 
+/* Mobile timer */
 @media (max-width: 767px) {
   .game-timer {
     position: fixed;
@@ -236,11 +231,42 @@ body {
   }
 }
 
-/* Adjusted glass panel */
+/* ----------------------------------------
+   UTILITY CLASSES
+---------------------------------------- */
+
+.cursor-grab {
+  cursor: grab;
+}
+
+/* Glass panel effect */
 .glass-panel-light {
-  @apply rounded-2xl
-         bg-neutral-900/30
-         backdrop-blur-[2px]
-         border
-         border-white/5;
+  border-radius: 1rem;
+  background-color: rgba(23, 23, 23, 0.3);
+  backdrop-filter: blur(2px);
+  border-width: 1px;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Slide-up animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* ----------------------------------------
+   LOADING STYLES
+---------------------------------------- */
+
+.loading-text {
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 700;
 }

@@ -6,23 +6,24 @@ import { GameState, GameScore } from '@/types/game-types'
 import React, { useMemo, useCallback } from 'react'
 
 //////////////////////////////////////////////////////
-/// TYPES
+/// ACTION WRAPPER COMPONENT
+/// Handles game UI transitions and visual feedback
 //////////////////////////////////////////////////////
 
+/* Props interface for the action wrapper */
 interface ActionWrapperProps {
   children: React.ReactNode
   selectedColor: string | null
-  isPulsing?: boolean
   blurhash?: string
   imageUrl?: string
   gameState: GameState
-  score?: GameScore
   currentNFTId?: string | number
   timeProgress?: number
 }
 
 //////////////////////////////////////////////////////
 /// CONSTANTS
+/// Visual configuration constants
 //////////////////////////////////////////////////////
 
 const STATIC_BG = '/images/bg_game_6529.JPEG'
@@ -31,16 +32,20 @@ const BACKGROUND_QUALITY = 50
 
 //////////////////////////////////////////////////////
 /// UTILITY FUNCTIONS
+/// Image and style processing functions
 //////////////////////////////////////////////////////
 
+/* Optimize image URLs for performance */
 const getOptimizedImageUrl = (url?: string): string => {
   if (!url || !url.includes('googleusercontent.com')) return url || ''
   const baseUrl = url.split('=')[0]
   return `${baseUrl}=w${BACKGROUND_WIDTH}-q${BACKGROUND_QUALITY}`
 }
 
+/* Get overlay styles for game states */
 const getOverlayStyles = () => 'absolute inset-0 bg-black/85 backdrop-saturate-[0.3]'
 
+/* Get background image styles based on game state */
 const getBackgroundImageStyles = (gameState: GameState) => {
   switch (gameState) {
     case 'start':
@@ -59,16 +64,15 @@ const getBackgroundImageStyles = (gameState: GameState) => {
 
 //////////////////////////////////////////////////////
 /// COMPONENT
+/// Visual wrapper for game interface with animations
 //////////////////////////////////////////////////////
 
 export function ActionWrapper({
   children,
   selectedColor = null,
-  isPulsing = false,
   blurhash,
   imageUrl,
   gameState,
-  score,
   currentNFTId,
   timeProgress = 1
 }: ActionWrapperProps): React.ReactElement {
@@ -77,13 +81,11 @@ export function ActionWrapper({
   
   // Memoize warning states calculations
   const {
-    isWarning,
     isGreen,
     isTangerine,
     isCritical,
     isFlashing
   } = useMemo(() => ({
-    isWarning: timeProgress < 0.67,
     isGreen: timeProgress < 0.67 && timeProgress >= 0.5,
     isTangerine: timeProgress < 0.5 && timeProgress >= 0.34,
     isCritical: timeProgress < 0.34 && timeProgress >= 0.17,
@@ -154,7 +156,7 @@ export function ActionWrapper({
           </motion.div>
         </AnimatePresence>
 
-        {/* Rest of overlays */}
+        {/* Game state overlays */}
         {gameState === 'playing' && (
           <div className="absolute inset-0">
             <motion.div 
@@ -194,6 +196,7 @@ export function ActionWrapper({
           </div>
         )}
 
+        {/* Color overlay for selected state */}
         {selectedColor && (
           <motion.div 
             className="absolute inset-0 pointer-events-none mix-blend-hard-light"
@@ -211,6 +214,7 @@ export function ActionWrapper({
           />
         )}
 
+        {/* Game state background overlay */}
         <div 
           className={`absolute inset-0 pointer-events-none ${
             gameState === 'start' ? 'bg-black/40' :
@@ -220,9 +224,11 @@ export function ActionWrapper({
           }`}
         />
 
+        {/* Submit state overlay */}
         {getSubmitOverlay()}
       </div>
 
+      {/* Content wrapper with animations */}
       <AnimatePresence mode="wait" presenceAffectsLayout={false}>
         <motion.div 
           key={currentNFTId}

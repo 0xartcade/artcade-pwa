@@ -44,7 +44,7 @@ export function LoadingSpinner({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-3xl font-orbitron font-bold bg-gradient-to-r from-artcade-purple to-artcade-pink text-transparent bg-clip-text"
+          className="loading-text text-3xl bg-gradient-to-r from-artcade-purple to-artcade-pink text-transparent bg-clip-text"
         >
           {text}
         </motion.div>
