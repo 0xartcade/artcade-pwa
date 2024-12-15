@@ -14,7 +14,6 @@ export interface GameMode {
 export interface GameType {
   name: string
   path: string
-  poweredBy: string
 }
 
 //////////////////////////////////////////////////////
@@ -24,19 +23,13 @@ export interface GameType {
 
 /* Available game types */
 export const GAME_TYPES: Record<string, GameType> = {
-  'artguessr': {
-    name: 'ArtGuessr',
-    path: 'games/artguessr/game-interface',
-    poweredBy: 'ArtGuessr'
+  'know-your-memes': {
+    name: 'Know Your Memes',
+    path: 'games/kym/game-interface',
   },
-  'template': {
-    name: 'Game Template',
-    path: 'games/game-template/game-interface',
-    poweredBy: 'Template Provider'
-  }
 } as const
 
-/* Available game modes - will be served by backend */  
+/* Available game modes - will be served by backend */
 export const GAME_MODES: Record<string, GameMode> = {
   '6529-collection': {
     name: 'Know Your Memes',

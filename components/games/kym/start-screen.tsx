@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { motion } from 'framer-motion'
-import { GAME_MODES, GAME_TYPES } from '@/config/game-registry'
-import { ACTIVE_GAME } from '@/config/active-game'
-import Image from 'next/image'
+import { motion } from "framer-motion";
+import { GAME_MODES, GAME_TYPES } from "@/config/game-registry";
+import { ACTIVE_GAME } from "@/config/active-game";
+import Image from "next/image";
 
 interface StartScreenProps {
-  onStartGame: () => void
+  onStartGame: () => void;
 }
 
 export function StartScreen({ onStartGame }: StartScreenProps) {
-  const gameMode = GAME_MODES[ACTIVE_GAME.mode]
-  const gameType = GAME_TYPES[ACTIVE_GAME.type]
+  const gameMode = GAME_MODES[ACTIVE_GAME.mode];
+  const gameType = GAME_TYPES[ACTIVE_GAME.type];
 
   const categories = [
-    { name: 'ARTIST NAME', color: 'from-purple-500 to-pink-500' },
-    { name: 'SEASON #', color: 'from-blue-500 to-cyan-500' },
-    { name: 'ART NAME', color: 'from-violet-500 to-purple-500' },
-    { name: 'FLOOR PRICE', color: 'from-red-500 to-rose-500' }
-  ]
+    { name: "TITLE", color: "from-purple-500 to-pink-500" },
+    { name: "ARTIST", color: "from-blue-500 to-cyan-500" },
+    { name: "SUPPLY", color: "from-violet-500 to-purple-500" },
+    { name: "SEASON", color: "from-red-500 to-rose-500" },
+  ];
 
   return (
     <div className="flex flex-col items-center justify-between h-full w-full max-w-lg mx-auto px-4 py-8">
@@ -37,7 +37,7 @@ export function StartScreen({ onStartGame }: StartScreenProps) {
       {/* Game Info */}
       <div className="flex-1 flex flex-col items-center justify-center w-full space-y-8 mt-4 mb-8">
         <div className="space-y-2 text-center">
-          <motion.h1 
+          <motion.h1
             className="text-3xl font-orbitron text-center bg-gradient-to-r from-artcade-purple to-artcade-pink text-transparent bg-clip-text"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -45,17 +45,17 @@ export function StartScreen({ onStartGame }: StartScreenProps) {
           >
             {gameMode.name}
           </motion.h1>
-          <motion.p
+          {/* <motion.p
             className="text-sm text-white/60"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
             Powered by {gameType.poweredBy}
-          </motion.p>
+          </motion.p> */}
         </div>
 
-        <motion.p 
+        <motion.p
           className="text-center text-white/80 max-w-md"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ export function StartScreen({ onStartGame }: StartScreenProps) {
               `}
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 + (index * 0.1) }}
+              transition={{ delay: 0.4 + index * 0.1 }}
             >
               {category.name}
             </motion.div>
@@ -91,7 +91,9 @@ export function StartScreen({ onStartGame }: StartScreenProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <p className="text-white/80">Points are earned for speed and accuracy.</p>
+          <p className="text-white/80">
+            Points are earned for speed and accuracy.
+          </p>
           <p className="text-white/80 font-orbitron">Good luck!</p>
         </motion.div>
       </div>
@@ -116,5 +118,5 @@ export function StartScreen({ onStartGame }: StartScreenProps) {
         </motion.button>
       </div>
     </div>
-  )
-} 
+  );
+}

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { AuthProvider } from "@/utils/auth-context";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -22,7 +23,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#000000" },
-    { media: "(prefers-color-scheme: light)", color: "#000000" }
+    { media: "(prefers-color-scheme: light)", color: "#000000" },
   ],
 };
 
@@ -32,12 +33,28 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/icons/0xArtcade-icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/0xArtcade-icon-512.png", sizes: "512x512", type: "image/png" }
+      {
+        url: "/icons/0xArtcade-icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/icons/0xArtcade-icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
     ],
     apple: [
-      { url: "/icons/0xArtcade-icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/0xArtcade-icon-512.png", sizes: "512x512", type: "image/png" }
+      {
+        url: "/icons/0xArtcade-icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/icons/0xArtcade-icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
     ],
   },
   appleWebApp: {
@@ -47,9 +64,10 @@ export const metadata: Metadata = {
     startupImage: [
       {
         url: "/splash.png",
-        media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
-      }
-    ]
+        media:
+          "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
+      },
+    ],
   },
   applicationName: "0xArtcade",
   formatDetection: {
@@ -58,19 +76,25 @@ export const metadata: Metadata = {
   other: {
     "mobile-web-app-capable": "yes",
     "apple-touch-fullscreen": "yes",
-  } as Record<string, string>
+  } as Record<string, string>,
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`bg-black ${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`bg-black ${geistSans.variable} ${geistMono.variable}`}
+    >
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-touch-fullscreen" content="yes" />
         <style>{`
@@ -129,10 +153,10 @@ export default function RootLayout({
       <body className="font-sans text-white overscroll-none">
         <div className="pwa-safe-area">
           <div className="game-layout">
-            {children}
+            <AuthProvider>{children}</AuthProvider>
           </div>
         </div>
       </body>
     </html>
-  )
+  );
 }
