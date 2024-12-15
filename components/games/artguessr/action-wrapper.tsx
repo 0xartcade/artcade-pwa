@@ -17,8 +17,9 @@ interface ActionWrapperProps {
   blurhash?: string
   imageUrl?: string
   gameState: GameState
-  currentNFTId?: string | number
-  timeProgress?: number
+  currentNFTId?: number
+  timeProgress: number
+  score?: GameScore
 }
 
 //////////////////////////////////////////////////////
@@ -74,7 +75,8 @@ export function ActionWrapper({
   imageUrl,
   gameState,
   currentNFTId,
-  timeProgress = 1
+  timeProgress = 1,
+  score
 }: ActionWrapperProps): React.ReactElement {
   // Optimize image URL
   const optimizedImageUrl = useMemo(() => getOptimizedImageUrl(imageUrl), [imageUrl])
