@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { GameState, GameSummary, RoundData, Tag, Criteria, NFTMetadata, GameScore } from '@/types/game-types'
 import { GAME_CONFIG, calculateTickets } from './game-config'
+import { api } from '@/utils/api'
 
 //////////////////////////////////////////////////////
 /// GAME STORE TYPES
@@ -14,11 +15,11 @@ interface GameStore {
   elapsedTime: number
   selectedTags: Record<Criteria, Tag | null>
   showResults: boolean
-  
+
   // Round data from backend
   rounds: RoundData[]
   totalScore: number
-  
+
   // Current NFT Data from backend
   currentNFT: NFTMetadata | null
   availableTags: Tag[]
@@ -47,7 +48,7 @@ const calculateRoundScore = (selectedTags: Record<Criteria, Tag | null>, timeEla
   return {
     correct: Object.values(selectedTags).filter((tag) => tag?.isCorrect).length,
     total: GAME_CONFIG.questions.length,
-    answers: GAME_CONFIG.questions.map(question => 
+    answers: GAME_CONFIG.questions.map(question =>
       selectedTags[question.id]?.isCorrect ?? false
     ),
     timeElapsed
@@ -75,9 +76,9 @@ const createRoundData = (
 
 /* 
  * This store will need to:
- * 1. Create game sessions via POST /games/know-your-memes/sessions
- * 2. Submit answers via POST /games/know-your-memes/sessions/{sessionId}/rounds/{roundNumber}/answer
- * 3. Fetch new rounds via GET /games/know-your-memes/sessions/{sessionId}/rounds/{roundNumber}
+ * 1. Create game sessions via POST
+ * 2. Submit answers via POST
+ * 3. Fetch new rounds via POST
  */
 export const useGameStore = create<GameStore>((set, get) => ({
   // Initial State
@@ -94,17 +95,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
   availableTags: [],
 
   // Actions
-  startNewGame: () => set({
-    gameState: 'playing',
-    currentRound: 0,
-    elapsedTime: 0,
-    selectedTags: Object.fromEntries(
-      GAME_CONFIG.questions.map(q => [q.id, null])
-    ) as Record<Criteria, Tag | null>,
-    showResults: false,
-    rounds: [],
-    totalScore: 0
-  }),
+  startNewGame: async () => {
+
+    set({
+      gameState: 'playing',
+      currentRound: 0,
+      elapsedTime: 0,
+      selectedTags: Object.fromEntries(
+        GAME_CONFIG.questions.map(q => [q.id, null])
+      ) as Record<Criteria, Tag | null>,
+      showResults: false,
+      rounds: [],
+      totalScore: 0
+    })
+  },
 
   submitRound: () => {
     const { currentNFT, selectedTags, elapsedTime, rounds } = get()
@@ -115,8 +119,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const roundData = createRoundData(currentNFT, selectedTags, elapsedTime)
     const newRounds = [...rounds, roundData]
-    const newTotalScore = newRounds.reduce((total, round) => 
-      total + (round.score.correct * 50), 0
+    const newTotalScore = newRounds.reduce((total, round) =>
+      total + (round.score.correct * 50 * (30 - round.score.timeElapsed)), 0
     )
 
     // 2. Update round data and calculate tickets
@@ -127,15 +131,20 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     // 3. Show score after calculation animation
     setTimeout(() => {
-      set({ 
+      set({
         gameState: newRounds.length >= ROUNDS_PER_GAME ? 'gameSummary' : 'submitted',
-        showResults: true 
+        showResults: true
       })
     }, CALCULATION_DURATION)
+
+    // submit score to backend if game is over
+    if (newRounds.length >= ROUNDS_PER_GAME) {
+      api.demoSubmitScore(newTotalScore).then((r) => { if (!r.success) alert(r.error) });
+    }
   },
 
   nextRound: () => {
-    const { currentRound } = get()
+    const { currentRound } = get();
     set({
       gameState: 'playing',
       currentRound: currentRound + 1,
