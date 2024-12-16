@@ -19,6 +19,9 @@ import { useGameStore } from "./game-mechanics";
 import { AnimatePresence, motion } from "framer-motion";
 import { LoadingScreen } from "./loading-screen";
 import { ACTIVE_GAME } from "@/config/active-game";
+import { api } from "@/utils/api";
+import { debounce, throttle } from "lodash";
+import { ApiResponse } from "@/utils/types";
 
 function transformToFullGameData(data: TemplateGameData): GameData {
   const titles = [...new Set(data.raw_data.map((nft) => nft.questions.title))];
@@ -124,7 +127,7 @@ export default function GameInterface() {
     selectTag(tag);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (gameState === "playing") {
       submitRound();
     } else if (gameState === "submitted") {

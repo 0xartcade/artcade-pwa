@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import { RoundData, GameSummary as GameSummaryType } from '@/types/game-types'
-import { GAME_CONFIG, calculateTickets } from './game-config'
-import React from 'react'
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { RoundData, GameSummary as GameSummaryType } from "@/types/game-types";
+import { GAME_CONFIG, calculateTickets } from "./game-config";
+import React, { useEffect } from "react";
 
 interface GameSummaryProps {
-  summary: GameSummaryType
-  onNewGame: () => void
+  summary: GameSummaryType;
+  onNewGame: () => void;
 }
 
 //////////////////////////////////////////////////////
@@ -16,13 +16,13 @@ interface GameSummaryProps {
 //////////////////////////////////////////////////////
 
 interface RoundSummaryCardProps {
-  round: RoundData
-  index: number
+  round: RoundData;
+  index: number;
 }
 
 const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
   return (
-    <motion.div 
+    <motion.div
       className="rounded-xl overflow-hidden relative bg-black/50"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -39,11 +39,11 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
         />
       </div>
 
-      <div className="flex h-24 relative">
+      <div className="flex h-20 relative">
         {/* Image Container with padding */}
         <div className="p-2 shrink-0">
           {/* Image wrapper */}
-          <div className="relative w-20 h-20 rounded-2xl overflow-hidden">
+          <div className="relative w-16 h-16 rounded-2xl overflow-hidden">
             <Image
               src={round.imageUrl}
               alt={round.nftMetadata.questions.title}
@@ -51,7 +51,7 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
               className="object-cover"
               placeholder={round.blurhash ? "blur" : undefined}
               blurDataURL={round.blurhash}
-              sizes="80px"
+              sizes="60px"
             />
           </div>
         </div>
@@ -59,49 +59,51 @@ const RoundSummaryCard = ({ round, index }: RoundSummaryCardProps) => {
         {/* Guesses Grid */}
         <div className="flex-1 grid grid-cols-2 gap-x-3 gap-y-1 p-2">
           {GAME_CONFIG.questions.map((question) => {
-            const guess = round.guesses[question.id]
-            const isCorrect = guess?.isCorrect
-            
+            const guess = round.guesses[question.id];
+            const isCorrect = guess?.isCorrect;
+
             return (
-              <div 
-                key={question.id}
-                className="text-sm flex items-center"
-              >
-                <div className={`
+              <div key={question.id} className="text-sm flex items-center">
+                <div
+                  className={`
                   flex-1 truncate font-medium
-                  ${isCorrect ? 'text-green-400' : 'text-red-400'}
-                `}>
-                  {guess?.value || 'No guess'}
+                  ${isCorrect ? "text-green-400" : "text-red-400"}
+                `}
+                >
+                  {guess?.value || "No guess"}
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
         {/* Score */}
         <div className="w-14 h-full flex flex-col items-center justify-center bg-black/60 text-md font-medium">
-          <div>{round.score.correct * 50}</div>
+          <div>{round.score.correct * 50 * (30 - round.score.timeElapsed)}</div>
           <div className="text-[10px] text-white/50">pts</div>
         </div>
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
 //////////////////////////////////////////////////////
 /// GAME SUMMARY SCREEN
 //////////////////////////////////////////////////////
 
-export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.ReactElement {
-  const earnedTickets = calculateTickets(summary.totalScore)
-  const { maxTicketsPerGame, maxScore } = GAME_CONFIG.gameSettings
-  const STATIC_BG = '/images/bg_game_6529.JPEG'
+export function GameSummary({
+  summary,
+  onNewGame,
+}: GameSummaryProps): React.ReactElement {
+  const earnedTickets = calculateTickets(summary.totalScore);
+  const { maxTicketsPerGame, maxScore } = GAME_CONFIG.gameSettings;
+  const STATIC_BG = "/images/bg_game_6529.JPEG";
 
   return (
     <div className="game-layout">
       {/* Static background */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
-        <motion.div 
+        <motion.div
           className="absolute inset-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
@@ -121,7 +123,7 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
 
       <div className="relative flex-1 flex flex-col p-4 px-2 -mt-8 overflow-y-auto z-10">
         {/* Title */}
-        <motion.h1 
+        <motion.h1
           className="text-2xl font-orbitron text-center mb-5 mt-10 bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -132,18 +134,14 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
         {/* Rounds */}
         <div className="space-y-2 mb-5 px-1">
           {summary.rounds.map((round, index) => (
-            <RoundSummaryCard 
-              key={index} 
-              round={round} 
-              index={index} 
-            />
+            <RoundSummaryCard key={index} round={round} index={index} />
           ))}
         </div>
 
         {/* Score Summary */}
         <div className="grid grid-cols-2 gap-4 mb-5">
           {/* Total Score */}
-          <motion.div 
+          <motion.div
             className="rounded-xl relative overflow-hidden"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,7 +163,7 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
           </motion.div>
 
           {/* Tickets */}
-          <motion.div 
+          <motion.div
             className="rounded-xl relative overflow-hidden"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -174,7 +172,9 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
             {/* Darker background */}
             <div className="absolute inset-0 -z-10 bg-black/60" />
             <div className="p-4">
-              <div className="text-white/70 text-sm mb-2">Estimated Tickets</div>
+              <div className="text-white/70 text-sm mb-2">
+                Estimated Tickets
+              </div>
               <div className="flex flex-col">
                 <div className="text-4xl font-['Orbitron'] bg-gradient-to-r from-yellow-400 to-orange-400 text-transparent bg-clip-text">
                   {earnedTickets}
@@ -208,5 +208,5 @@ export function GameSummary({ summary, onNewGame }: GameSummaryProps): React.Rea
         </div>
       </div>
     </div>
-  )
-} 
+  );
+}

@@ -149,11 +149,33 @@ async function submitKYMGameplay(gameplayId: number): Promise<ApiResponse<KYMRev
   }
 }
 
+async function demoSubmitScore(score: number): Promise<ApiResponse<null>> {
+  const r = await apiFetch(`/kym/demo/submit`, {
+    method: "POST",
+    body: JSON.stringify({ score })
+  });
+
+  if (!r.ok) {
+    return {
+      success: false,
+      data: null,
+      error: "Something went wrong when trying to submit your answer. Please try again.",
+    };
+  } else {
+    return {
+      success: true,
+      data: null,
+      error: "",
+    }
+  }
+}
+
 export const api = {
   getUserInfo,
   loginOTP,
   startKYMGameplay,
   createKYMQuestion,
   submitKYMQuestion,
-  submitKYMGameplay
+  submitKYMGameplay,
+  demoSubmitScore
 }

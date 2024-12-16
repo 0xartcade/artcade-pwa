@@ -11,7 +11,6 @@ import { api } from '@/utils/api'
 /* Game session state that will sync with backend */
 interface GameStore {
   gameState: GameState
-  gameplayId: number
   currentRound: number
   elapsedTime: number
   selectedTags: Record<Criteria, Tag | null>
@@ -84,7 +83,6 @@ const createRoundData = (
 export const useGameStore = create<GameStore>((set, get) => ({
   // Initial State
   gameState: 'start',
-  gameplayId: 0,
   currentRound: 0,
   elapsedTime: 0,
   selectedTags: Object.fromEntries(
@@ -98,16 +96,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // Actions
   startNewGame: async () => {
-    // start new game
-    const response = await api.startKYMGameplay();
-    if (!response.success) {
-      alert(response.error);
-      return;
-    }
-    const { data: gameplayId } = response;
+
     set({
       gameState: 'playing',
-      gameplayId: gameplayId!,
       currentRound: 0,
       elapsedTime: 0,
       selectedTags: Object.fromEntries(
@@ -129,7 +120,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const roundData = createRoundData(currentNFT, selectedTags, elapsedTime)
     const newRounds = [...rounds, roundData]
     const newTotalScore = newRounds.reduce((total, round) =>
-      total + (round.score.correct * 50), 0
+      total + (round.score.correct * 50 * (30 - round.score.timeElapsed)), 0
     )
 
     // 2. Update round data and calculate tickets
@@ -145,11 +136,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
         showResults: true
       })
     }, CALCULATION_DURATION)
+
+    // submit score to backend if game is over
+    if (newRounds.length >= ROUNDS_PER_GAME) {
+      api.demoSubmitScore(newTotalScore).then((r) => { if (!r.success) alert(r.error) });
+    }
   },
 
   nextRound: () => {
-    const { gameplayId, currentRound } = get();
-    // get question
+    const { currentRound } = get();
     set({
       gameState: 'playing',
       currentRound: currentRound + 1,
