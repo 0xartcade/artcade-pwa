@@ -1,36 +1,9 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 0xArtcade PWA
+*The mobile companion for 0xArtcade where all gameplay will be experienced*
 
-## Getting Started
+## Some Philosophy!
+Generally, people play games for fun, while on the go, and whenever they can make time (ie, in the mornings, if you get what I'm laying down). A purely mobile gameplay experience aligns well with how we expect people to play the game and reaches a wider audience. Using PWA technology allows us to craft an app-like experience without a whole new tech stack.
 
-First, run the development server:
+We've also implemented this PWA to avoid deep linking to crypto wallets, and instead use a custom OTP system with our backend to allow users to link their mobile apps to their account. As we expand our systems to allow for more general login (email, social) in addition to the web3 login we already implemented, we expect this to be a welcome addition that helps attract a wider audience to art and NFTs. 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Leaving crypto interactions to the desktop site also optimizes crypto interactions to be batch executed and separated from gameplay. Again, we believe that this helps minimize friction from mobile crypto wallets and expands future use cases to those outside of crypto (and can onboard them nicely too).
