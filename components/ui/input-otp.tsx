@@ -17,7 +17,7 @@ const InputOTP = React.forwardRef<
   <OTPInput
     ref={ref}
     containerClassName={cn(
-      "flex items-center gap-2 has-[:disabled]:opacity-50",
+      "flex items-center justify-center",
       containerClassName
     )}
     className={cn("disabled:cursor-not-allowed", className)}
@@ -30,7 +30,7 @@ const InputOTPGroup = React.forwardRef<
   React.ElementRef<"div">,
   React.ComponentPropsWithoutRef<"div">
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("flex items-center", className)} {...props} />
+  <div ref={ref} className={cn("flex gap-2", className)} {...props} />
 ));
 InputOTPGroup.displayName = "InputOTPGroup";
 
@@ -45,17 +45,15 @@ const InputOTPSlot = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md",
-        isActive && "z-10 ring-1 ring-ring",
+        "h-14 w-14 rounded-xl border-2 border-input bg-black/20 text-3xl font-['Orbitron'] flex items-center justify-center",
+        isActive && "ring-2 ring-artcade-pink border-artcade-purple",
         className
       )}
       {...props}
     >
       {char}
       {hasFakeCaret && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
-        </div>
+        <div className="h-8 w-px animate-caret-blink bg-artcade-pink" />
       )}
     </div>
   );
@@ -67,7 +65,7 @@ const InputOTPSeparator = React.forwardRef<
   React.ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => (
   <div ref={ref} role="separator" {...props}>
-    <Minus />
+    <Minus className="text-white/20 w-6" />
   </div>
 ));
 InputOTPSeparator.displayName = "InputOTPSeparator";
