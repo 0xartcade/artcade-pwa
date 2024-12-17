@@ -30,11 +30,10 @@ export const UserLink = () => {
         </p>
 
         <div className="w-full max-w-[420px] mb-16">
-          <InputOTP 
-            maxLength={6} 
-            value={code} 
+          <InputOTP
+            maxLength={6}
+            value={code}
             onChange={(value) => setCode(value)}
-            pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
           >
             <InputOTPGroup>
               <InputOTPSlot index={0} />
