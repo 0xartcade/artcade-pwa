@@ -16,7 +16,7 @@ export const UserLink = () => {
   return initialized ? (
     <div className="min-h-screen pt-20 px-6">
       <div className="flex flex-col items-center">
-        <div className="relative w-[420px] h-[90px]">
+        <div className="relative max-w-full h-auto px-4">
           <Image
             src="/images/0xartcade_logo_type.png"
             alt="0xArtcade"
@@ -29,7 +29,7 @@ export const UserLink = () => {
           Enter the six digit code from 0xArtcade to link your account
         </p>
 
-        <div className="w-full max-w-[420px] mb-16">
+        <div className="w-full px-4 mb-16">
           <InputOTP
             maxLength={6}
             value={code}
